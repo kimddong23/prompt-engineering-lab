@@ -631,7 +631,7 @@ elif accuracy_diff > 0 and token_diff > 0:
 ## 11. 프로젝트 구조
 
 ```
-prompt-engineering-showcase/
+prompt-engineering-lab/
 ├── experiments/                    # 실험 노트북
 │   ├── 01_basic_techniques.ipynb   # 기본 vs 구조화 프롬프트
 │   └── 02_chain_of_thought.ipynb   # Chain of Thought 실험
@@ -695,8 +695,8 @@ prompt-engineering-showcase/
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/yourusername/prompt-engineering-showcase.git
-cd prompt-engineering-showcase
+git clone https://github.com/kimddong23/prompt-engineering-lab.git
+cd prompt-engineering-lab
 
 # 2. 패키지 설치
 pip install -r requirements.txt
@@ -771,7 +771,7 @@ jupyter notebook experiments/01_basic_techniques.ipynb
 
 ## 연락처
 
-- **GitHub**: [github.com/yourusername](https://github.com/yourusername)
+- **GitHub**: [github.com/kimddong23](https://github.com/kimddong23)
 - **Email**: your.email@example.com
 
 ---
