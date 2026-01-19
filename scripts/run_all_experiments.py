@@ -90,6 +90,10 @@ if sys.platform == 'win32':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
+# 상위 디렉토리 모듈 임포트를 위한 경로 설정
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # ============================================================================
 # 필수 라이브러리 임포트
 # ============================================================================
@@ -1143,10 +1147,12 @@ def main():
     # ========================================
     # 결과를 JSON 파일로 저장
     # ========================================
-    with open("results/all_experiments.json", "w", encoding="utf-8") as f:
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    results_path = os.path.join(project_root, "results/all_experiments.json")
+    with open(results_path, "w", encoding="utf-8") as f:
         json.dump(save_data, f, ensure_ascii=False, indent=2)
 
-    print(f"\n결과 저장: results/all_experiments.json")
+    print(f"\n결과 저장: {results_path}")
     print(f"완료 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("\n" + "=" * 70)
     print("모든 실험 완료!")

@@ -36,6 +36,10 @@ if sys.platform == 'win32':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
+# 상위 디렉토리 모듈 임포트를 위한 경로 설정
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from langchain_ollama import ChatOllama
 import tiktoken
 
@@ -356,7 +360,8 @@ class CareerExperimentRunner:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # 상세 결과 저장
-        detailed_path = f"results/career_experiments_{timestamp}.json"
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        detailed_path = os.path.join(project_root, f"results/career_experiments_{timestamp}.json")
         with open(detailed_path, "w", encoding="utf-8") as f:
             json.dump({
                 "summary": summary,

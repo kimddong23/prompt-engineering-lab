@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 """
 ================================================================================
-개발자 프롬프트 108회 실험 (Development Prompt 108 Experiments)
+비즈니스 문서 프롬프트 108회 실험 (Business Document Prompt 108 Experiments)
 ================================================================================
 
 ## 이 스크립트의 목적
-코드 리뷰, 문서화 프롬프트의 효과를 108회 실험으로 검증
+비즈니스 이메일, 보고서 작성 프롬프트의 효과를 108회 실험으로 검증
 
 ## 108배 원칙
 불교의 108배처럼, 충분한 반복으로 통계적으로 유의미한 결과 도출
 
 ## 실험 구성
-- 코드 리뷰 프롬프트: 54회 (일반, 보안, 성능, 리팩토링)
-- 문서화 프롬프트: 54회 (API, README, 주석, 아키텍처)
+- 이메일 작성 프롬프트: 54회
+- 보고서 작성 프롬프트: 54회
 
 ## 평가 지표
-1. 응답 품질 (1-10점): 문제 발견율, 구체성
-2. 이슈 탐지율: 예상 이슈 중 발견된 비율
-3. 코드 제안 포함율: 개선된 코드 제시 여부
-4. 토큰 효율성: 입출력 토큰 대비 정보량
+1. 응답 품질 (1-10점): 구조, 전문성, 실용성
+2. 필수 요소 포함율: 예상 요소 중 포함된 비율
+3. 토큰 효율성: 입출력 토큰 대비 정보량
 ================================================================================
 """
 
@@ -33,33 +32,37 @@ if sys.platform == 'win32':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
+# 상위 디렉토리 모듈 임포트를 위한 경로 설정
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from langchain_ollama import ChatOllama
 import tiktoken
 
 # 테스트 케이스 및 프롬프트 임포트
-from evaluation.development_test_cases import (
-    get_all_development_test_cases,
-    get_code_review_test_cases,
-    get_documentation_test_cases,
-    DevelopmentTestCase
+from evaluation.business_test_cases import (
+    get_all_business_test_cases,
+    get_email_test_cases,
+    get_report_test_cases,
+    BusinessTestCase
 )
-from templates.development.code_review import (
-    get_code_review_prompt,
-    get_security_review_prompt,
-    get_performance_review_prompt,
-    get_refactoring_prompt
+from templates.business.email_writing import (
+    get_formal_email_prompt,
+    get_apology_email_prompt,
+    get_proposal_email_prompt,
+    get_follow_up_email_prompt
 )
-from templates.development.documentation import (
-    get_api_documentation_prompt,
-    get_readme_prompt,
-    get_code_comments_prompt,
-    get_architecture_doc_prompt
+from templates.business.report_writing import (
+    get_weekly_report_prompt,
+    get_analysis_report_prompt,
+    get_meeting_minutes_prompt,
+    get_project_proposal_prompt
 )
 
 
-class DevelopmentExperimentRunner:
+class BusinessExperimentRunner:
     """
-    개발자 프롬프트 실험 실행기
+    비즈니스 문서 프롬프트 실험 실행기
 
     108회 실험을 자동으로 수행하고 결과를 기록
     """
@@ -82,7 +85,7 @@ class DevelopmentExperimentRunner:
         """토큰 수 계산"""
         return len(self.enc.encode(text))
 
-    def evaluate_response_quality(self, response: str, expected_issues: List[str], category: str) -> Dict:
+    def evaluate_response_quality(self, response: str, expected_elements: List[str]) -> Dict:
         """
         응답 품질 평가
 
@@ -90,128 +93,148 @@ class DevelopmentExperimentRunner:
         ----------
         response : str
             LLM 응답
-        expected_issues : List[str]
-            예상되는 이슈/요소 리스트
-        category : str
-            테스트 카테고리
+        expected_elements : List[str]
+            예상되는 필수 요소 리스트
 
         Returns
         -------
         Dict
             평가 결과
         """
-        # 이슈/요소 발견율 계산
-        found_issues = 0
-        response_lower = response.lower()
+        # 필수 요소 포함율 계산
+        found_elements = 0
+        for element in expected_elements:
+            # 요소의 핵심 키워드로 매칭
+            keywords = element.lower().replace(" ", "")
+            if any(kw in response.lower() for kw in [keywords, element.lower()]):
+                found_elements += 1
 
-        for issue in expected_issues:
-            # 이슈의 핵심 키워드로 매칭
-            keywords = issue.lower().split()
-            if any(kw in response_lower for kw in keywords):
-                found_issues += 1
+        element_coverage = found_elements / len(expected_elements) if expected_elements else 0
 
-        issue_detection_rate = found_issues / len(expected_issues) if expected_issues else 0
-
-        # 코드 블록 포함 여부
-        has_code_block = "```" in response
-
-        # 구조화된 형식 여부
+        # 구조화된 형식 여부 확인
         has_structure = any([
             "##" in response,
             "|" in response,  # 표 형식
-            "라인" in response or "Line" in response.lower(),  # 라인 참조
+            "1." in response or "- " in response,  # 목록
         ])
 
-        # 구체적 제안 포함 여부
-        has_specific_suggestions = any([
-            "변경" in response or "수정" in response,
-            "->" in response or "=>" in response,
-            "대신" in response or "권장" in response
-        ])
+        # 전문적 어조 확인
+        professional_markers = [
+            "드립니다", "감사합니다", "검토", "확인",
+            "말씀", "부탁", "안내", "요청"
+        ]
+        professionalism = sum(1 for marker in professional_markers if marker in response)
 
         # 종합 점수 (1-10)
         quality_score = 0
-        quality_score += min(issue_detection_rate * 4, 4)  # 최대 4점
-        quality_score += 2 if has_code_block else 0  # 코드 블록 2점
-        quality_score += 2 if has_structure else 0  # 구조화 2점
-        quality_score += 2 if has_specific_suggestions else 0  # 구체성 2점
+        quality_score += min(element_coverage * 4, 4)  # 최대 4점
+        quality_score += 3 if has_structure else 0  # 구조화 3점
+        quality_score += min(professionalism * 0.5, 3)  # 전문성 최대 3점
 
         return {
             "quality_score": round(quality_score, 2),
-            "issue_detection_rate": round(issue_detection_rate * 100, 1),
-            "has_code_block": has_code_block,
+            "element_coverage": round(element_coverage * 100, 1),
             "has_structure": has_structure,
-            "has_specific_suggestions": has_specific_suggestions,
-            "found_issues": found_issues,
-            "total_issues": len(expected_issues)
+            "professionalism_score": professionalism,
+            "found_elements": found_elements,
+            "total_elements": len(expected_elements)
         }
 
-    def generate_prompt(self, test_case: DevelopmentTestCase) -> str:
+    def generate_prompt(self, test_case: BusinessTestCase) -> str:
         """테스트 케이스에 맞는 프롬프트 생성"""
-        if test_case.category == "code_review":
-            if test_case.subcategory == "general":
-                return get_code_review_prompt(
-                    code=test_case.code_snippet,
-                    language=test_case.language,
-                    filename="example." + test_case.language.lower()[:2],
-                    code_purpose="일반 코드"
+        if test_case.category == "email":
+            if test_case.subcategory == "formal":
+                return get_formal_email_prompt(
+                    sender_name="김철수",
+                    sender_position="과장",
+                    recipient_name="이영희",
+                    recipient_position="부장",
+                    relationship="업무 관계",
+                    email_purpose=test_case.scenario,
+                    main_content=test_case.input_context,
+                    desired_action="검토 및 회신"
                 )
-            elif test_case.subcategory == "security":
-                return get_security_review_prompt(
-                    code=test_case.code_snippet,
-                    language=test_case.language,
-                    app_type="웹 애플리케이션"
+            elif test_case.subcategory == "apology":
+                return get_apology_email_prompt(
+                    sender_name="김철수",
+                    sender_position="팀장",
+                    recipient_type="고객",
+                    issue_description=test_case.input_context,
+                    cause="내부 프로세스 문제",
+                    current_action="즉시 조치 중",
+                    prevention_plan="프로세스 개선"
                 )
-            elif test_case.subcategory == "performance":
-                return get_performance_review_prompt(
-                    code=test_case.code_snippet,
-                    language=test_case.language
+            elif test_case.subcategory == "proposal":
+                return get_proposal_email_prompt(
+                    sender_intro="ABC 회사 사업개발팀",
+                    recipient_info=test_case.industry + " 담당자",
+                    proposal_content=test_case.input_context,
+                    value_proposition="업무 효율 향상",
+                    our_qualifications="관련 분야 10년 경험",
+                    collaboration_type="파트너십"
                 )
-            else:  # refactoring
-                return get_refactoring_prompt(
-                    code=test_case.code_snippet,
-                    language=test_case.language
+            else:  # follow_up
+                return get_follow_up_email_prompt(
+                    previous_interaction=test_case.input_context,
+                    interaction_date="지난 주",
+                    follow_up_purpose=test_case.scenario,
+                    new_information="추가 정보",
+                    requested_action="검토 및 회신"
                 )
-        else:  # documentation
-            if test_case.subcategory == "api":
-                return get_api_documentation_prompt(
-                    api_name="API 엔드포인트",
-                    endpoint="/api/example",
-                    http_method="POST",
-                    api_purpose="데이터 처리",
-                    request_params="JSON 본문",
-                    response_format="JSON 응답"
+        else:  # report
+            if test_case.subcategory == "weekly":
+                return get_weekly_report_prompt(
+                    reporter_name="김철수 과장",
+                    department=test_case.industry,
+                    report_to="팀장",
+                    period_start="2024-01-15",
+                    period_end="2024-01-19",
+                    raw_content=test_case.input_context,
+                    achievements="주요 업무 완료",
+                    issues="특별 이슈 없음",
+                    next_plans="다음 주 계획"
                 )
-            elif test_case.subcategory == "readme":
-                return get_readme_prompt(
-                    project_name="Example Project",
-                    one_liner="예제 프로젝트입니다",
-                    main_features="주요 기능",
-                    tech_stack=test_case.language,
-                    installation="pip install 또는 npm install",
-                    usage_example=test_case.code_snippet
+            elif test_case.subcategory == "analysis":
+                return get_analysis_report_prompt(
+                    analysis_type=test_case.scenario,
+                    analysis_purpose="전략 수립",
+                    analysis_target=test_case.industry,
+                    collected_data=test_case.input_context,
+                    background_info="시장 환경 변화"
                 )
-            elif test_case.subcategory == "comments":
-                return get_code_comments_prompt(
-                    code=test_case.code_snippet,
-                    language=test_case.language
+            elif test_case.subcategory == "meeting":
+                return get_meeting_minutes_prompt(
+                    meeting_title=test_case.scenario,
+                    meeting_datetime="2024-01-20 14:00",
+                    meeting_location="회의실 A",
+                    attendees="관련 팀원",
+                    meeting_purpose="업무 논의",
+                    meeting_content=test_case.input_context,
+                    discussion_points="주요 안건",
+                    decisions="결정 사항"
                 )
-            else:  # architecture
-                return get_architecture_doc_prompt(
-                    system_name="Example System",
-                    system_purpose="시스템 설명",
-                    main_features="주요 기능",
-                    tech_stack=test_case.language,
-                    components=test_case.code_snippet
+            else:  # project
+                return get_project_proposal_prompt(
+                    project_name=test_case.scenario,
+                    project_type=test_case.industry,
+                    background=test_case.input_context,
+                    objectives="목표 달성",
+                    current_situation="현재 상황",
+                    proposal_details="제안 내용",
+                    expected_benefits="기대 효과",
+                    budget="예산 미정",
+                    resources="인력 배정 예정",
+                    timeline="3개월",
+                    risks="리스크 관리 필요"
                 )
 
-    def run_single_experiment(self, test_case: DevelopmentTestCase) -> Dict:
+    def run_single_experiment(self, test_case: BusinessTestCase) -> Dict:
         """
         단일 실험 실행
 
         Parameters
         ----------
-        test_case : DevelopmentTestCase
+        test_case : BusinessTestCase
             테스트 케이스
 
         Returns
@@ -242,15 +265,15 @@ class DevelopmentExperimentRunner:
         # 품질 평가
         quality_eval = self.evaluate_response_quality(
             response,
-            test_case.expected_issues,
-            test_case.category
+            test_case.expected_elements
         ) if success else {}
 
         return {
             "test_case_id": test_case.id,
             "category": test_case.category,
             "subcategory": test_case.subcategory,
-            "language": test_case.language,
+            "scenario": test_case.scenario,
+            "industry": test_case.industry,
             "difficulty": test_case.difficulty,
             "success": success,
             "error": error_msg,
@@ -277,14 +300,14 @@ class DevelopmentExperimentRunner:
             전체 실험 결과 요약
         """
         print("=" * 70)
-        print("개발자 프롬프트 108회 실험")
+        print("비즈니스 문서 프롬프트 108회 실험")
         print("=" * 70)
         print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"모델: {self.model}")
         print(f"실험 횟수: {limit}회")
         print()
 
-        test_cases = get_all_development_test_cases()[:limit]
+        test_cases = get_all_business_test_cases()[:limit]
         total = len(test_cases)
 
         for i, test_case in enumerate(test_cases, 1):
@@ -324,19 +347,16 @@ class DevelopmentExperimentRunner:
                     "total_quality": 0,
                     "total_tokens": 0,
                     "total_time": 0,
-                    "issue_detection_rates": [],
-                    "code_block_count": 0
+                    "element_coverages": []
                 }
             stats = category_stats[cat]
             stats["count"] += 1
             stats["total_quality"] += r["quality_evaluation"].get("quality_score", 0)
             stats["total_tokens"] += r["total_tokens"]
             stats["total_time"] += r["response_time"]
-            stats["issue_detection_rates"].append(
-                r["quality_evaluation"].get("issue_detection_rate", 0)
+            stats["element_coverages"].append(
+                r["quality_evaluation"].get("element_coverage", 0)
             )
-            if r["quality_evaluation"].get("has_code_block", False):
-                stats["code_block_count"] += 1
 
         # 평균 계산
         for cat, stats in category_stats.items():
@@ -344,10 +364,9 @@ class DevelopmentExperimentRunner:
             stats["avg_quality"] = round(stats["total_quality"] / n, 2)
             stats["avg_tokens"] = round(stats["total_tokens"] / n, 0)
             stats["avg_time"] = round(stats["total_time"] / n, 2)
-            stats["avg_issue_detection"] = round(
-                sum(stats["issue_detection_rates"]) / n, 1
+            stats["avg_element_coverage"] = round(
+                sum(stats["element_coverages"]) / n, 1
             )
-            stats["code_block_rate"] = round(stats["code_block_count"] / n * 100, 1)
 
         # 전체 통계
         total_quality = sum(r["quality_evaluation"].get("quality_score", 0) for r in successful)
@@ -378,7 +397,8 @@ class DevelopmentExperimentRunner:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # 상세 결과 저장
-        detailed_path = f"results/development_experiments_{timestamp}.json"
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        detailed_path = os.path.join(project_root, f"results/business_experiments_{timestamp}.json")
         with open(detailed_path, "w", encoding="utf-8") as f:
             json.dump({
                 "summary": summary,
@@ -399,8 +419,7 @@ class DevelopmentExperimentRunner:
         for cat, stats in summary.get("category_stats", {}).items():
             print(f"  {cat}:")
             print(f"    - 평균 품질: {stats['avg_quality']}/10")
-            print(f"    - 이슈 탐지율: {stats['avg_issue_detection']}%")
-            print(f"    - 코드 블록 포함율: {stats['code_block_rate']}%")
+            print(f"    - 필수 요소 포함율: {stats['avg_element_coverage']}%")
             print(f"    - 평균 토큰: {stats['avg_tokens']}")
         print()
         print(f"결과 저장: {detailed_path}")
@@ -409,7 +428,7 @@ class DevelopmentExperimentRunner:
 
 def main():
     """메인 실행 함수"""
-    runner = DevelopmentExperimentRunner(model="qwen2.5:7b")
+    runner = BusinessExperimentRunner(model="qwen2.5:7b")
 
     # 108회 실험 실행
     summary = runner.run_all_experiments(limit=108)

@@ -361,19 +361,17 @@ LLM을 실무에 적용할 때 가장 큰 과제는 **비용**과 **정확도**�
 | 종합 최적화 | 280 | 100% | 고성능 |
 | Chain of Thought | 300 | 100% | 최고 정확도 |
 
-```mermaid
-quadrantChart
-    title 비용 vs 정확도
-    x-axis 낮은 토큰 --> 높은 토큰
-    y-axis 낮은 정확도 --> 높은 정확도
-    quadrant-1 고비용 고성능
-    quadrant-2 저비용 고성능 (이상적)
-    quadrant-3 저비용 저성능
-    quadrant-4 고비용 저성능 (피해야 함)
-    CoT: [0.9, 0.95]
-    종합최적화: [0.8, 0.95]
-    기본: [0.5, 0.85]
-    구조화: [0.2, 0.75]
+```
+                        비용 vs 정확도
+
+    높은 정확도 │  ②저비용 고성능(이상적)  │  ①고비용 고성능
+               │     ·구조화              │     ·CoT
+               │                          │     ·종합최적화
+               ├──────────────────────────┼──────────────────
+    낮은 정확도 │  ③저비용 저성능          │  ④고비용 저성능
+               │                          │     (피해야 함)
+               └──────────────────────────┴──────────────────
+                      낮은 토큰                  높은 토큰
 ```
 
 **결론:**
@@ -485,11 +483,11 @@ flowchart TD
     I -->|예| K[JSON 형식 지정]
     I -->|아니오| L[Few-shot<br/>예시로 형식 명시]
 
-    style E fill:#e1f5fe
-    style G fill:#e1f5fe
-    style J fill:#c8e6c9
-    style K fill:#fff3e0
-    style L fill:#fff3e0
+    style E fill:#1565c0,color:#fff
+    style G fill:#1565c0,color:#fff
+    style J fill:#2e7d32,color:#fff
+    style K fill:#e65100,color:#fff
+    style L fill:#e65100,color:#fff
 ```
 
 **간단 버전:**
@@ -632,9 +630,11 @@ elif accuracy_diff > 0 and token_diff > 0:
 
 ```
 prompt-engineering-lab/
-├── experiments/                    # 실험 노트북
-│   ├── 01_basic_techniques.ipynb   # 기본 vs 구조화 프롬프트
-│   └── 02_chain_of_thought.ipynb   # Chain of Thought 실험
+├── scripts/                        # 실험 실행 스크립트
+│   ├── run_all_experiments.py      # 기초 10개 실험 실행
+│   ├── run_career_experiments.py   # 취업 108회 실험 실행
+│   ├── run_business_experiments.py # 비즈니스 108회 실험 실행
+│   └── run_development_experiments.py # 개발자 108회 실험 실행
 │
 ├── evaluation/                     # 평가 시스템
 │   ├── __init__.py
@@ -658,16 +658,16 @@ prompt-engineering-lab/
 │       ├── code_review.py          # 코드 리뷰
 │       └── documentation.py        # 문서화
 │
+├── experiments/                    # 실험 노트북
+│   ├── 01_basic_techniques.ipynb   # 기본 vs 구조화 프롬프트
+│   └── 02_chain_of_thought.ipynb   # Chain of Thought 실험
+│
 ├── results/                        # 실험 결과 (JSON)
 │   ├── all_experiments.json        # 기초 실험 결과
 │   ├── career_experiments_*.json   # 취업 108회 실험 결과
 │   ├── business_experiments_*.json # 비즈니스 108회 실험 결과
 │   └── development_experiments_*.json # 개발자 108회 실험 결과
 │
-├── run_all_experiments.py          # 기초 10개 실험 실행
-├── run_career_experiments.py       # 취업 108회 실험 실행
-├── run_business_experiments.py     # 비즈니스 108회 실험 실행
-├── run_development_experiments.py  # 개발자 108회 실험 실행
 ├── requirements.txt
 └── README.md
 ```
@@ -676,8 +676,8 @@ prompt-engineering-lab/
 
 | 파일 | 역할 | 코드 라인 |
 |------|------|----------|
-| `run_all_experiments.py` | 기초 10개 실험 자동 실행 | ~600줄 |
-| `run_*_experiments.py` | 실무 108회 실험 실행 (3개) | 각 ~400줄 |
+| `scripts/run_all_experiments.py` | 기초 10개 실험 자동 실행 | ~600줄 |
+| `scripts/run_*_experiments.py` | 실무 108회 실험 실행 (3개) | 각 ~400줄 |
 | `evaluation/metrics.py` | 5가지 평가 지표 구현 | ~200줄 |
 | `evaluation/*_test_cases.py` | 총 425개 테스트 케이스 | 각 ~1000줄 |
 | `templates/*/` | 실무 프롬프트 템플릿 | 각 ~300줄 |
@@ -708,12 +708,12 @@ ollama pull qwen2.5:7b
 ollama serve
 
 # 5-A. 기초 10개 실험 실행
-python run_all_experiments.py
+python scripts/run_all_experiments.py
 
 # 5-B. 실무 프롬프트 108회 실험
-python run_career_experiments.py       # 취업 준비 108회
-python run_business_experiments.py     # 비즈니스 108회
-python run_development_experiments.py  # 개발자 108회
+python scripts/run_career_experiments.py       # 취업 준비 108회
+python scripts/run_business_experiments.py     # 비즈니스 108회
+python scripts/run_development_experiments.py  # 개발자 108회
 
 # 5-C. 개별 노트북 실행
 jupyter notebook experiments/01_basic_techniques.ipynb
@@ -772,7 +772,6 @@ jupyter notebook experiments/01_basic_techniques.ipynb
 ## 연락처
 
 - **GitHub**: [github.com/kimddong23](https://github.com/kimddong23)
-- **Email**: your.email@example.com
 
 ---
 
