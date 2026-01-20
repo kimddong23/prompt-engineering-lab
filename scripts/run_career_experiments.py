@@ -1,24 +1,32 @@
 # -*- coding: utf-8 -*-
 """
 ================================================================================
-취업 준비 프롬프트 V3.0 실험 (Career Prompt V3.0 Experiments)
+취업 준비 프롬프트 V4.0 실험 (Career Prompt V4.0 Experiments)
 ================================================================================
 
 ## 이 스크립트의 목적
-취업 준비 관련 고도화 프롬프트(V3.0)의 효과를 실험으로 검증
+취업 준비 관련 에이전트형 프롬프트(V4.0)의 효과를 실험으로 검증
 
-## V3.0 프롬프트 개선사항
-- Chain-of-Thought 누적 구조 (이전 단계 결과 참조)
-- Few-shot 예시 8개로 확대
-- 동의어 기반 문제점 매칭 시스템
-- "문제 유형" 필드 필수 출력으로 평가 정확도 향상
+## V4.0 프롬프트 핵심 철학
+"프롬프트 엔지니어링은 에이전트를 만드는 것이다"
+- 완전한 페르소나 구축 (이름, 경력, 가치관, 실패 경험)
+- 10단계 심층 분석
+- 내면 독백을 통한 전문가 사고 과정
 
-## 평가 지표 (V3.0 강화)
+## 버전별 비교
+| 버전 | 평균 품질 | 핵심 특징 |
+|------|----------|----------|
+| V1.0 | 5.15/10 | 기본 프롬프트 |
+| V2.0 | 7.51/10 | Chain-of-Thought |
+| V3.0 | 8.00/10 | 누적 CoT + 동의어 매칭 |
+| V4.0 | 목표 9.5+ | 에이전트형 페르소나 |
+
+## 평가 지표
 1. 응답 품질 (1-10점): 피드백의 구체성, 실용성, 구조화
 2. 문제점 발견율: 동의어 매칭으로 정확도 향상
 3. 개선안 제시율: Before/After 형식의 구체적 개선안 제시 여부
 4. 토큰 효율성: 입출력 토큰 대비 정보량
-5. Chain-of-Thought: 단계별 분석 포함 여부
+5. PHASE 분석: 단계별 심층 분석 포함 여부
 ================================================================================
 """
 
@@ -62,6 +70,20 @@ from templates.career.cover_letter_feedback import (
     get_motivation_feedback_prompt,
     get_interview_coaching_prompt
 )
+# V4.0 에이전트형 프롬프트
+from templates.career.resume_feedback_v4 import (
+    get_resume_feedback_prompt_v4
+)
+from templates.career.cover_letter_feedback_v4 import (
+    get_cover_letter_feedback_prompt_v4
+)
+# V3.5 간결한 페르소나 프롬프트
+from templates.career.resume_feedback_v35 import (
+    get_resume_feedback_prompt_v35
+)
+from templates.career.cover_letter_feedback_v35 import (
+    get_cover_letter_feedback_prompt_v35
+)
 
 
 class CareerExperimentRunner:
@@ -71,7 +93,7 @@ class CareerExperimentRunner:
     108회 실험을 자동으로 수행하고 결과를 기록
     """
 
-    def __init__(self, model: str = "qwen2.5:7b"):
+    def __init__(self, model: str = "qwen2.5:7b", prompt_version: str = "v4"):
         """
         실험 실행기 초기화
 
@@ -79,11 +101,15 @@ class CareerExperimentRunner:
         ----------
         model : str
             사용할 Ollama 모델
+        prompt_version : str
+            프롬프트 버전 ("v3" 또는 "v4")
         """
         self.llm = ChatOllama(model=model, temperature=0.3)
         self.enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
         self.results = []
         self.model = model
+        self.prompt_version = prompt_version
+        print(f"[INFO] 프롬프트 버전: {prompt_version.upper()}")
 
     def count_tokens(self, text: str) -> int:
         """토큰 수 계산"""
@@ -151,26 +177,42 @@ class CareerExperimentRunner:
         # 기본값
         return "IT/소프트웨어"
 
-    # V3.0 동의어 사전 - 문제점 발견율 향상을 위한 키워드 매핑
+    # V4.0 동의어 사전 - 문제점 발견율 향상을 위한 키워드 매핑
     ISSUE_SYNONYMS = {
-        # 이력서 관련
-        "정량적 성과 부재": ["정량", "수치", "숫자", "측정", "KPI", "%", "퍼센트", "몇 건", "몇 명", "성과지표", "구체적 결과", "달성률"],
-        "기술 스택 상세 누락": ["기술", "스택", "버전", "프레임워크", "도구", "사용 기술", "기술 역량", "스킬", "툴"],
-        "STAR 구조 미적용": ["STAR", "상황", "과제", "행동", "결과", "구조화", "체계적", "스토리", "맥락"],
-        "역할 불명확": ["역할", "담당", "기여", "책임", "포지션", "본인의 역할", "구체적 역할", "어떤 일"],
+        # ========== 이력서 관련 ==========
+        "정량적 성과 부재": ["정량", "수치", "숫자", "측정", "KPI", "%", "퍼센트", "몇 건", "몇 명", "성과지표", "구체적 결과", "달성률", "P3-1", "PHASE 3"],
+        "기술 스택 상세 누락": ["기술", "스택", "버전", "프레임워크", "도구", "사용 기술", "기술 역량", "스킬", "툴", "P4-1", "PHASE 4"],
+        "STAR 구조 미적용": ["STAR", "상황", "과제", "행동", "결과", "구조화", "체계적", "스토리", "맥락", "P3-2", "PHASE 3"],
+        "역할 불명확": ["역할", "담당", "기여", "책임", "포지션", "본인의 역할", "구체적 역할", "어떤 일", "P3-3", "P4-2"],
         "프로젝트 상세 설명 부족": ["프로젝트", "상세", "설명", "구체적", "내용", "세부사항"],
         "경험 구체화 필요": ["경험", "구체화", "구체적", "상세", "예시", "사례"],
         "분석 도구 상세화 필요": ["분석", "도구", "툴", "기술", "방법론"],
 
-        # 자기소개서 관련
+        # V4.0 추가 문제 유형 (이력서)
+        "ATS 키워드 부족": ["ATS", "키워드", "밀도", "통과", "PHASE 2", "P2-1"],
+        "섹션 구조 미흡": ["섹션", "구조", "레이아웃", "형식"],
+        "길이 부적절": ["길이", "페이지", "분량", "너무 긴", "너무 짧은"],
+        "직무 연관성 부족": ["직무", "연관", "관련", "연결", "적합", "fit", "P4-2"],
+        "성과 과장 의심": ["과장", "의심", "검증", "불가능", "P6-2"],
+        "모호한 기여도": ["모호", "기여", "불분명", "애매"],
+        "경력 공백 미설명": ["공백", "갭", "비어있는", "설명", "P6-1"],
+        "잦은 이직 미설명": ["이직", "잦은", "짧은 재직"],
+        "오탈자/불일치": ["오탈자", "불일치", "오류", "틀린"],
+        "차별화 요소 부재": ["차별화", "유니크", "특별", "다른 지원자"],
+
+        # ========== 자기소개서 관련 ==========
         "Why This Company 부재": ["왜 이 회사", "지원 동기", "회사 선택", "이 회사", "귀사", "why"],
         "차별성 없음": ["차별", "독특", "특별", "다른 지원자", "경쟁력", "강점", "유니크"],
         "구체적 사례 없음": ["사례", "예시", "경험", "구체적", "실제", "에피소드"],
-        "직무 연관성 부족": ["직무", "연관", "관련", "연결", "적합", "fit"],
-        "진정성 부족": ["진정성", "진심", "솔직", "authentic", "개인적"],
+        "진정성 부족": ["진정성", "진심", "솔직", "authentic", "개인적", "복붙", "템플릿"],
         "스토리 구조 미흡": ["스토리", "구조", "흐름", "전개", "기승전결"],
 
-        # 면접 관련
+        # V4.0 추가 문제 유형 (자기소개서)
+        "두괄식 미적용": ["두괄식", "결론", "핵심", "첫 문장", "Hook", "P1-1", "PHASE 1"],
+        "지원동기 불명확": ["지원동기", "왜", "이유", "동기", "P4-1"],
+        "구체성 부족": ["구체", "모호", "추상", "막연", "P3-2", "P6-1"],
+
+        # ========== 면접 관련 ==========
         "STAR 구조 미흡": ["STAR", "상황", "과제", "행동", "결과", "구조"],
         "갈등 상황 구체화": ["갈등", "충돌", "어려움", "문제 상황", "극복"],
         "답변 구조화 필요": ["구조화", "체계", "논리", "순서", "정리"],
@@ -241,13 +283,16 @@ class CareerExperimentRunner:
             "|" in response,  # 테이블 형식
         ])
 
-        # 3. Chain-of-Thought 분석 여부 (V2.0 신규)
+        # 3. Chain-of-Thought 분석 여부 (V4.0 PHASE 구조 포함)
         has_chain_of_thought = any([
             "STEP 1" in response or "step 1" in response_lower,
             "단계" in response,
             "먼저" in response and "그 다음" in response,
             "분석 프로세스" in response,
-            "PHASE" in response or "phase" in response_lower,
+            "PHASE 1" in response or "phase 1" in response_lower,  # V4.0
+            "PHASE 2" in response or "phase 2" in response_lower,  # V4.0
+            "내면 독백" in response,  # V4.0 에이전트 사고 과정
+            "김서연" in response or "박민준" in response,  # V4.0 에이전트 이름
         ])
 
         # 4. Before/After 형식 개선안 (V2.0 신규)
@@ -322,26 +367,68 @@ class CareerExperimentRunner:
         Dict
             실험 결과
         """
-        # V2.0 프롬프트 생성 (산업 정보 추출)
+        # 프롬프트 생성 (버전에 따라 분기)
         industry = self._extract_industry(test_case.job_position, test_case.company_type)
 
         if test_case.category == "resume":
-            prompt = get_resume_feedback_prompt(
-                resume_content=test_case.input_content,
-                job_position=test_case.job_position,
-                company_type=test_case.company_type,
-                experience_level=test_case.experience_level,
-                industry=industry  # V2.0 신규 파라미터
-            )
+            if self.prompt_version == "v4":
+                # V4.0 에이전트형 프롬프트
+                prompt = get_resume_feedback_prompt_v4(
+                    resume_content=test_case.input_content,
+                    job_position=test_case.job_position,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level,
+                    industry=industry
+                )
+            elif self.prompt_version == "v3.5":
+                # V3.5 간결한 페르소나 프롬프트
+                prompt = get_resume_feedback_prompt_v35(
+                    resume_content=test_case.input_content,
+                    job_position=test_case.job_position,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level,
+                    industry=industry
+                )
+            else:
+                # V3.0 프롬프트
+                prompt = get_resume_feedback_prompt(
+                    resume_content=test_case.input_content,
+                    job_position=test_case.job_position,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level,
+                    industry=industry
+                )
         elif test_case.category == "cover_letter":
-            prompt = get_cover_letter_feedback_prompt(
-                question=f"{test_case.subcategory} 항목",
-                answer=test_case.input_content,
-                company_name=test_case.company_type,
-                job_position=test_case.job_position,
-                company_values="",  # 테스트 케이스에 없으면 빈 값
-                char_limit=500
-            )
+            if self.prompt_version == "v4":
+                # V4.0 에이전트형 프롬프트
+                prompt = get_cover_letter_feedback_prompt_v4(
+                    cover_letter_content=test_case.input_content,
+                    job_position=test_case.job_position,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level,
+                    industry=industry,
+                    question_type=test_case.subcategory
+                )
+            elif self.prompt_version == "v3.5":
+                # V3.5 간결한 페르소나 프롬프트
+                prompt = get_cover_letter_feedback_prompt_v35(
+                    cover_letter_content=test_case.input_content,
+                    job_position=test_case.job_position,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level,
+                    industry=industry,
+                    question_type=test_case.subcategory
+                )
+            else:
+                # V3.0 프롬프트
+                prompt = get_cover_letter_feedback_prompt(
+                    question=f"{test_case.subcategory} 항목",
+                    answer=test_case.input_content,
+                    company_name=test_case.company_type,
+                    job_position=test_case.job_position,
+                    company_values="",
+                    char_limit=500
+                )
         else:  # interview - V2.0 면접 코칭 프롬프트 사용
             # 면접 질문 추출 (Q: 로 시작하는 부분)
             interview_question = "면접 질문"
@@ -546,13 +633,38 @@ class CareerExperimentRunner:
 
 def main():
     """메인 실행 함수"""
-    runner = CareerExperimentRunner(model="qwen2.5:7b")
+    import argparse
 
-    # 30회 실험 실행 (통계적 유의성을 위한 최소 샘플 수)
-    summary = runner.run_all_experiments(limit=30)
+    parser = argparse.ArgumentParser(description="취업 준비 프롬프트 실험")
+    parser.add_argument("--version", type=str, default="v3.5", choices=["v3", "v3.5", "v4"],
+                        help="프롬프트 버전 (v3, v3.5, v4)")
+    parser.add_argument("--limit", type=int, default=30,
+                        help="실험 횟수 (기본값: 30)")
+    args = parser.parse_args()
 
     print()
-    print("30회 실험 완료!")
+    print("=" * 70)
+    print(f"  취업 준비 프롬프트 {args.version.upper()} 실험")
+    print("=" * 70)
+    if args.version == "v4":
+        print("  V4.0 핵심: 에이전트형 페르소나 (김서연/박민준)")
+        print("  - 완전한 페르소나 구축 (이름, 경력, 가치관, 실패 경험)")
+        print("  - 10단계 PHASE 심층 분석")
+    elif args.version == "v3.5":
+        print("  V3.5 핵심: V3.0 구조 + 간결한 페르소나 (300단어)")
+        print("  - 검증된 4단계 STEP 구조 유지")
+        print("  - 핵심 가치관 3가지만 포함")
+        print("  - 7B 모델 최적화")
+    print("=" * 70)
+    print()
+
+    runner = CareerExperimentRunner(model="qwen2.5:7b", prompt_version=args.version)
+
+    # 실험 실행
+    summary = runner.run_all_experiments(limit=args.limit)
+
+    print()
+    print(f"{args.limit}회 {args.version.upper()} 실험 완료!")
 
 
 if __name__ == "__main__":
