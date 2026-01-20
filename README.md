@@ -1,5 +1,10 @@
 # Prompt Engineering Lab
 
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+[![LangChain](https://img.shields.io/badge/LangChain-0.1+-green.svg)](https://langchain.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-qwen2.5:7b-orange.svg)](https://ollama.ai/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ## 경량 로컬 LLM, 프롬프트 엔지니어링만으로 충분할까?
 
 이 프로젝트는 하나의 질문에서 시작했습니다:
@@ -32,13 +37,6 @@
 | 접근성 | API 키 필요 | **누구나 실행 가능** |
 
 **핵심 발견**: 프롬프트 엔지니어링을 제대로 하면, 작은 모델로도 큰 모델에 근접한 품질을 낼 수 있습니다.
-
----
-
-[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![LangChain](https://img.shields.io/badge/LangChain-0.1+-green.svg)](https://langchain.com/)
-[![Ollama](https://img.shields.io/badge/Ollama-qwen2.5:7b-orange.svg)](https://ollama.ai/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
