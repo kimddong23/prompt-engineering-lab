@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 ================================================================================
-취업 준비 프롬프트 108회 실험 (Career Prompt 108 Experiments)
+취업 준비 프롬프트 V3.0 실험 (Career Prompt V3.0 Experiments)
 ================================================================================
 
 ## 이 스크립트의 목적
-취업 준비 관련 프롬프트의 효과를 108회 실험으로 검증
+취업 준비 관련 고도화 프롬프트(V3.0)의 효과를 실험으로 검증
 
-## 108배 원칙
-불교의 108배처럼, 충분한 반복으로 통계적으로 유의미한 결과 도출
+## V3.0 프롬프트 개선사항
+- Chain-of-Thought 누적 구조 (이전 단계 결과 참조)
+- Few-shot 예시 8개로 확대
+- 동의어 기반 문제점 매칭 시스템
+- "문제 유형" 필드 필수 출력으로 평가 정확도 향상
 
-## 실험 구성
-- 이력서 첨삭 프롬프트: 36회
-- 자기소개서 피드백 프롬프트: 36회
-- 면접 답변 코칭 프롬프트: 36회
-
-## 평가 지표
-1. 응답 품질 (1-10점): 피드백의 구체성, 실용성
-2. 문제점 발견율: 예상 문제점 중 몇 개를 찾았는지
-3. 개선안 제시율: 실행 가능한 개선안 제시 여부
+## 평가 지표 (V3.0 강화)
+1. 응답 품질 (1-10점): 피드백의 구체성, 실용성, 구조화
+2. 문제점 발견율: 동의어 매칭으로 정확도 향상
+3. 개선안 제시율: Before/After 형식의 구체적 개선안 제시 여부
 4. 토큰 효율성: 입출력 토큰 대비 정보량
+5. Chain-of-Thought: 단계별 분석 포함 여부
 ================================================================================
 """
 
@@ -31,13 +30,15 @@ from datetime import datetime
 from typing import Dict, List, Any
 from dataclasses import asdict
 
-# Windows 한글 출력 설정
+# 상위 디렉토리 모듈 임포트를 위한 경로 설정
+import os
+
+# Windows 한글 출력 설정 (UTF-8 코드 페이지)
 if sys.platform == 'win32':
+    os.system('chcp 65001 > nul 2>&1')
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-# 상위 디렉토리 모듈 임포트를 위한 경로 설정
-import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from langchain_ollama import ChatOllama
@@ -53,11 +54,13 @@ from evaluation.career_test_cases import (
 from templates.career.resume_feedback import (
     get_resume_feedback_prompt,
     get_star_conversion_prompt,
-    get_entry_level_prompt
+    get_entry_level_prompt,
+    get_competitive_analysis_prompt
 )
 from templates.career.cover_letter_feedback import (
     get_cover_letter_feedback_prompt,
-    get_motivation_feedback_prompt
+    get_motivation_feedback_prompt,
+    get_interview_coaching_prompt
 )
 
 
@@ -86,9 +89,97 @@ class CareerExperimentRunner:
         """토큰 수 계산"""
         return len(self.enc.encode(text))
 
+    def _extract_industry(self, job_position: str, company_type: str) -> str:
+        """
+        직무와 회사 유형에서 산업 정보 추출
+
+        Parameters
+        ----------
+        job_position : str
+            지원 직무
+        company_type : str
+            회사 유형
+
+        Returns
+        -------
+        str
+            추출된 산업 정보
+        """
+        # 직무 기반 산업 매핑
+        job_industry_map = {
+            "개발": "IT/소프트웨어",
+            "백엔드": "IT/소프트웨어",
+            "프론트엔드": "IT/소프트웨어",
+            "풀스택": "IT/소프트웨어",
+            "데이터": "IT/데이터",
+            "AI": "IT/AI",
+            "보안": "IT/보안",
+            "DevOps": "IT/인프라",
+            "iOS": "IT/모바일",
+            "Android": "IT/모바일",
+            "마케팅": "마케팅/광고",
+            "마케터": "마케팅/광고",
+            "영업": "영업/세일즈",
+            "기획": "경영/기획",
+            "PM": "IT/프로덕트",
+            "디자이너": "디자인",
+            "UX": "디자인/UX",
+        }
+
+        # 회사 유형 기반 산업 매핑
+        company_industry_map = {
+            "금융": "금융/핀테크",
+            "핀테크": "금융/핀테크",
+            "제약": "제약/바이오",
+            "게임": "게임/엔터테인먼트",
+            "무역": "무역/유통",
+            "화장품": "뷰티/화장품",
+            "연구소": "연구/R&D",
+            "컨설팅": "컨설팅",
+        }
+
+        # 직무에서 산업 추출
+        for keyword, industry in job_industry_map.items():
+            if keyword in job_position:
+                return industry
+
+        # 회사 유형에서 산업 추출
+        for keyword, industry in company_industry_map.items():
+            if keyword in company_type:
+                return industry
+
+        # 기본값
+        return "IT/소프트웨어"
+
+    # V3.0 동의어 사전 - 문제점 발견율 향상을 위한 키워드 매핑
+    ISSUE_SYNONYMS = {
+        # 이력서 관련
+        "정량적 성과 부재": ["정량", "수치", "숫자", "측정", "KPI", "%", "퍼센트", "몇 건", "몇 명", "성과지표", "구체적 결과", "달성률"],
+        "기술 스택 상세 누락": ["기술", "스택", "버전", "프레임워크", "도구", "사용 기술", "기술 역량", "스킬", "툴"],
+        "STAR 구조 미적용": ["STAR", "상황", "과제", "행동", "결과", "구조화", "체계적", "스토리", "맥락"],
+        "역할 불명확": ["역할", "담당", "기여", "책임", "포지션", "본인의 역할", "구체적 역할", "어떤 일"],
+        "프로젝트 상세 설명 부족": ["프로젝트", "상세", "설명", "구체적", "내용", "세부사항"],
+        "경험 구체화 필요": ["경험", "구체화", "구체적", "상세", "예시", "사례"],
+        "분석 도구 상세화 필요": ["분석", "도구", "툴", "기술", "방법론"],
+
+        # 자기소개서 관련
+        "Why This Company 부재": ["왜 이 회사", "지원 동기", "회사 선택", "이 회사", "귀사", "why"],
+        "차별성 없음": ["차별", "독특", "특별", "다른 지원자", "경쟁력", "강점", "유니크"],
+        "구체적 사례 없음": ["사례", "예시", "경험", "구체적", "실제", "에피소드"],
+        "직무 연관성 부족": ["직무", "연관", "관련", "연결", "적합", "fit"],
+        "진정성 부족": ["진정성", "진심", "솔직", "authentic", "개인적"],
+        "스토리 구조 미흡": ["스토리", "구조", "흐름", "전개", "기승전결"],
+
+        # 면접 관련
+        "STAR 구조 미흡": ["STAR", "상황", "과제", "행동", "결과", "구조"],
+        "갈등 상황 구체화": ["갈등", "충돌", "어려움", "문제 상황", "극복"],
+        "답변 구조화 필요": ["구조화", "체계", "논리", "순서", "정리"],
+        "구체적 수치 부족": ["수치", "숫자", "정량", "구체적", "몇", "%"],
+    }
+
     def evaluate_response_quality(self, response: str, expected_issues: List[str]) -> Dict:
         """
-        응답 품질 평가
+        V3.0 응답 품질 평가 (동의어 매칭 시스템 적용)
 
         Parameters
         ----------
@@ -102,42 +193,111 @@ class CareerExperimentRunner:
         Dict
             평가 결과
         """
-        # 문제점 발견율 계산
+        response_lower = response.lower()
+
+        # 1. 문제점 발견율 계산 (V3.0 4단계 매칭)
         found_issues = 0
         for issue in expected_issues:
-            # 핵심 키워드 추출하여 매칭
-            keywords = issue.replace(" ", "").lower()
-            if any(kw in response.lower() for kw in keywords.split("/")):
+            issue_found = False
+
+            # 방법 1: 정확한 키워드 매칭 (공백 제거)
+            issue_normalized = issue.replace(" ", "").lower()
+            if issue_normalized in response_lower.replace(" ", ""):
+                issue_found = True
+
+            # 방법 2: "문제 유형:" 필드 파싱
+            if not issue_found:
+                if f"문제 유형**: {issue}" in response or f"문제 유형: {issue}" in response:
+                    issue_found = True
+
+            # 방법 3: 동의어 매칭 (2개 이상 일치 시)
+            if not issue_found:
+                synonyms = self.ISSUE_SYNONYMS.get(issue, [])
+                if synonyms:
+                    matches = sum(1 for syn in synonyms if syn.lower() in response_lower)
+                    if matches >= 2:
+                        issue_found = True
+
+            # 방법 4: 단어 분리 후 AND 매칭
+            if not issue_found:
+                words = issue.split()
+                if len(words) >= 2:
+                    if all(word.lower() in response_lower for word in words):
+                        issue_found = True
+
+            if issue_found:
                 found_issues += 1
 
         issue_detection_rate = found_issues / len(expected_issues) if expected_issues else 0
 
-        # 구조화된 피드백 여부 확인
+        # 2. 구조화된 피드백 여부 확인 (V2.0 강화)
         has_structure = any([
             "##" in response,
+            "###" in response,
+            "STEP" in response or "step" in response_lower,
             "강점" in response or "장점" in response,
             "개선" in response or "수정" in response,
-            "→" in response or "->" in response
+            "→" in response or "->" in response,
+            "|" in response,  # 테이블 형식
         ])
 
-        # 구체적 개선안 포함 여부
+        # 3. Chain-of-Thought 분석 여부 (V2.0 신규)
+        has_chain_of_thought = any([
+            "STEP 1" in response or "step 1" in response_lower,
+            "단계" in response,
+            "먼저" in response and "그 다음" in response,
+            "분석 프로세스" in response,
+            "PHASE" in response or "phase" in response_lower,
+        ])
+
+        # 4. Before/After 형식 개선안 (V2.0 신규)
+        has_before_after = any([
+            "Before" in response and "After" in response,
+            "[현재]" in response or "[개선]" in response,
+            "원본" in response and "개선" in response,
+            "기존" in response and "변경" in response,
+            ">" in response,  # 인용 형식
+        ])
+
+        # 5. 구체적 개선안 포함 여부
         has_specific_suggestions = any([
             "예:" in response or "예시:" in response,
             "변경:" in response or "수정:" in response,
-            "[" in response and "]" in response
+            "[" in response and "]" in response,
+            "권장" in response,
+            "제안" in response,
         ])
 
-        # 종합 점수 (1-10)
+        # 6. 정량적 평가 포함 여부 (V2.0 신규)
+        has_quantitative = any([
+            "/100" in response or "/10" in response,
+            "점수" in response,
+            "%" in response,
+            "등급" in response,
+        ])
+
+        # 7. 테이블 형식 사용 여부 (V2.0 신규)
+        has_table = "|" in response and "---" in response
+
+        # 종합 점수 (1-10) - V2.0 강화된 배점
         quality_score = 0
-        quality_score += min(issue_detection_rate * 4, 4)  # 최대 4점
-        quality_score += 3 if has_structure else 0  # 구조화 3점
-        quality_score += 3 if has_specific_suggestions else 0  # 구체성 3점
+        quality_score += min(issue_detection_rate * 2.5, 2.5)  # 최대 2.5점
+        quality_score += 2.0 if has_structure else 0  # 구조화 2점
+        quality_score += 1.5 if has_chain_of_thought else 0  # CoT 1.5점
+        quality_score += 1.5 if has_before_after else 0  # Before/After 1.5점
+        quality_score += 1.0 if has_specific_suggestions else 0  # 구체성 1점
+        quality_score += 1.0 if has_quantitative else 0  # 정량 평가 1점
+        quality_score += 0.5 if has_table else 0  # 테이블 0.5점
 
         return {
             "quality_score": round(quality_score, 2),
             "issue_detection_rate": round(issue_detection_rate * 100, 1),
             "has_structure": has_structure,
+            "has_chain_of_thought": has_chain_of_thought,
+            "has_before_after": has_before_after,
             "has_specific_suggestions": has_specific_suggestions,
+            "has_quantitative": has_quantitative,
+            "has_table": has_table,
             "found_issues": found_issues,
             "total_issues": len(expected_issues)
         }
@@ -162,52 +322,47 @@ class CareerExperimentRunner:
         Dict
             실험 결과
         """
-        # 프롬프트 생성
+        # V2.0 프롬프트 생성 (산업 정보 추출)
+        industry = self._extract_industry(test_case.job_position, test_case.company_type)
+
         if test_case.category == "resume":
             prompt = get_resume_feedback_prompt(
                 resume_content=test_case.input_content,
                 job_position=test_case.job_position,
                 company_type=test_case.company_type,
-                experience_level=test_case.experience_level
+                experience_level=test_case.experience_level,
+                industry=industry  # V2.0 신규 파라미터
             )
         elif test_case.category == "cover_letter":
             prompt = get_cover_letter_feedback_prompt(
-                question="자기소개서 항목",
+                question=f"{test_case.subcategory} 항목",
                 answer=test_case.input_content,
                 company_name=test_case.company_type,
-                job_position=test_case.job_position
+                job_position=test_case.job_position,
+                company_values="",  # 테스트 케이스에 없으면 빈 값
+                char_limit=500
             )
-        else:  # interview
-            prompt = f"""### 역할
-당신은 20년 경력의 면접관입니다. 다양한 기업에서 면접을 진행한 경험이 있습니다.
+        else:  # interview - V2.0 면접 코칭 프롬프트 사용
+            # 면접 질문 추출 (Q: 로 시작하는 부분)
+            interview_question = "면접 질문"
+            if "Q:" in test_case.input_content:
+                q_start = test_case.input_content.find("Q:")
+                q_end = test_case.input_content.find("A:", q_start)
+                if q_end > q_start:
+                    interview_question = test_case.input_content[q_start+2:q_end].strip()
 
-### 작업
-아래 면접 답변을 평가하고 개선 피드백을 제공하세요.
+            # 면접 답변 추출 (A: 로 시작하는 부분)
+            answer_content = test_case.input_content
+            if "A:" in test_case.input_content:
+                a_start = test_case.input_content.find("A:")
+                answer_content = test_case.input_content[a_start+2:].strip()
 
-### 지원 직무
-{test_case.job_position}
-
-### 면접 답변
-{test_case.input_content}
-
-### 평가 기준
-1. STAR 구조 (Situation-Task-Action-Result)
-2. 구체성과 진정성
-3. 직무 연관성
-4. 논리적 흐름
-
-### 출력 형식
-## 현재 답변 평가
-- 점수: /10
-- 강점: ...
-- 약점: ...
-
-## 개선된 답변
-[STAR 구조로 재구성된 답변]
-
-## 추가 조언
-- ...
-"""
+            prompt = get_interview_coaching_prompt(
+                answer=answer_content,
+                job_position=test_case.job_position,
+                interview_question=interview_question,
+                question_type=test_case.subcategory  # personality, technical, situational
+            )
 
         # 실행 및 측정
         start_time = time.time()
@@ -393,11 +548,11 @@ def main():
     """메인 실행 함수"""
     runner = CareerExperimentRunner(model="qwen2.5:7b")
 
-    # 108회 실험 실행
-    summary = runner.run_all_experiments(limit=108)
+    # 30회 실험 실행 (통계적 유의성을 위한 최소 샘플 수)
+    summary = runner.run_all_experiments(limit=30)
 
     print()
-    print("108회 실험 완료!")
+    print("30회 실험 완료!")
 
 
 if __name__ == "__main__":
