@@ -46,6 +46,7 @@ from evaluation.business_test_cases import (
     get_report_test_cases,
     BusinessTestCase
 )
+# V1.0 프롬프트
 from templates.business.email_writing import (
     get_formal_email_prompt,
     get_apology_email_prompt,
@@ -58,6 +59,26 @@ from templates.business.report_writing import (
     get_meeting_minutes_prompt,
     get_project_proposal_prompt
 )
+# V2.0 프롬프트
+from templates.business.email_writing_v2 import (
+    get_formal_email_prompt_v2,
+    get_apology_email_prompt_v2,
+    get_proposal_email_prompt_v2,
+    get_follow_up_email_prompt_v2
+)
+from templates.business.report_writing_v2 import (
+    get_weekly_report_prompt_v2,
+    get_analysis_report_prompt_v2,
+    get_meeting_minutes_prompt_v2,
+    get_project_proposal_prompt_v2
+)
+# V3.0 보고서 프롬프트 (동적 섹션 생성)
+from templates.business.report_writing_v3 import (
+    get_weekly_report_prompt_v3,
+    get_analysis_report_prompt_v3,
+    get_meeting_minutes_prompt_v3,
+    get_project_proposal_prompt_v3
+)
 
 
 class BusinessExperimentRunner:
@@ -67,7 +88,7 @@ class BusinessExperimentRunner:
     108회 실험을 자동으로 수행하고 결과를 기록
     """
 
-    def __init__(self, model: str = "qwen2.5:7b"):
+    def __init__(self, model: str = "qwen2.5:7b", prompt_version: str = "v1"):
         """
         실험 실행기 초기화
 
@@ -75,11 +96,14 @@ class BusinessExperimentRunner:
         ----------
         model : str
             사용할 Ollama 모델
+        prompt_version : str
+            프롬프트 버전 (v1, v2)
         """
         self.llm = ChatOllama(model=model, temperature=0.3)
         self.enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
         self.results = []
         self.model = model
+        self.prompt_version = prompt_version
 
     def count_tokens(self, text: str) -> int:
         """토큰 수 계산"""
@@ -142,6 +166,17 @@ class BusinessExperimentRunner:
 
     def generate_prompt(self, test_case: BusinessTestCase) -> str:
         """테스트 케이스에 맞는 프롬프트 생성"""
+        # V3.0 프롬프트 (보고서만 V3.0, 이메일은 V2.0 유지)
+        if self.prompt_version == "v3":
+            return self._generate_v3_prompt(test_case)
+        # V2.0 프롬프트 사용
+        if self.prompt_version == "v2":
+            return self._generate_v2_prompt(test_case)
+        # V1.0 (기본)
+        return self._generate_v1_prompt(test_case)
+
+    def _generate_v1_prompt(self, test_case: BusinessTestCase) -> str:
+        """V1.0 프롬프트 생성"""
         if test_case.category == "email":
             if test_case.subcategory == "formal":
                 return get_formal_email_prompt(
@@ -228,6 +263,163 @@ class BusinessExperimentRunner:
                     risks="리스크 관리 필요"
                 )
 
+    def _generate_v2_prompt(self, test_case: BusinessTestCase) -> str:
+        """V2.0 프롬프트 생성 - expected_elements 포함"""
+        if test_case.category == "email":
+            if test_case.subcategory == "formal":
+                return get_formal_email_prompt_v2(
+                    sender_name="김철수",
+                    sender_position="과장",
+                    recipient_name="이영희",
+                    recipient_position="부장",
+                    relationship="업무 관계",
+                    email_purpose=test_case.scenario,
+                    main_content=test_case.input_context,
+                    desired_action="검토 및 회신",
+                    expected_elements=test_case.expected_elements
+                )
+            elif test_case.subcategory == "apology":
+                return get_apology_email_prompt_v2(
+                    sender_name="김철수",
+                    sender_position="팀장",
+                    recipient_type="고객",
+                    issue_description=test_case.input_context,
+                    cause="내부 프로세스 문제",
+                    current_action="즉시 조치 중",
+                    prevention_plan="프로세스 개선",
+                    expected_elements=test_case.expected_elements
+                )
+            elif test_case.subcategory == "proposal":
+                return get_proposal_email_prompt_v2(
+                    sender_intro="ABC 회사 사업개발팀",
+                    recipient_info=test_case.industry + " 담당자",
+                    proposal_content=test_case.input_context,
+                    value_proposition="업무 효율 향상",
+                    our_qualifications="관련 분야 10년 경험",
+                    collaboration_type="파트너십",
+                    expected_elements=test_case.expected_elements
+                )
+            else:  # follow_up
+                return get_follow_up_email_prompt_v2(
+                    previous_interaction=test_case.input_context,
+                    interaction_date="지난 주",
+                    follow_up_purpose=test_case.scenario,
+                    new_information="추가 정보",
+                    requested_action="검토 및 회신",
+                    expected_elements=test_case.expected_elements
+                )
+        else:  # report
+            if test_case.subcategory == "weekly":
+                return get_weekly_report_prompt_v2(
+                    reporter_name="김철수 과장",
+                    department=test_case.industry,
+                    report_to="팀장",
+                    period_start="2024-01-15",
+                    period_end="2024-01-19",
+                    raw_content=test_case.input_context,
+                    achievements="주요 업무 완료",
+                    issues="특별 이슈 없음",
+                    next_plans="다음 주 계획",
+                    expected_elements=test_case.expected_elements
+                )
+            elif test_case.subcategory == "analysis":
+                return get_analysis_report_prompt_v2(
+                    analysis_type=test_case.scenario,
+                    analysis_purpose="전략 수립",
+                    analysis_target=test_case.industry,
+                    collected_data=test_case.input_context,
+                    background_info="시장 환경 변화",
+                    expected_elements=test_case.expected_elements
+                )
+            elif test_case.subcategory == "meeting":
+                return get_meeting_minutes_prompt_v2(
+                    meeting_title=test_case.scenario,
+                    meeting_datetime="2024-01-20 14:00",
+                    meeting_location="회의실 A",
+                    attendees="관련 팀원",
+                    meeting_purpose="업무 논의",
+                    meeting_content=test_case.input_context,
+                    discussion_points="주요 안건",
+                    decisions="결정 사항",
+                    expected_elements=test_case.expected_elements
+                )
+            else:  # project
+                return get_project_proposal_prompt_v2(
+                    project_name=test_case.scenario,
+                    project_type=test_case.industry,
+                    background=test_case.input_context,
+                    objectives="목표 달성",
+                    current_situation="현재 상황",
+                    proposal_details="제안 내용",
+                    expected_benefits="기대 효과",
+                    budget="예산 미정",
+                    resources="인력 배정 예정",
+                    timeline="3개월",
+                    risks="리스크 관리 필요",
+                    expected_elements=test_case.expected_elements
+                )
+
+    def _generate_v3_prompt(self, test_case: BusinessTestCase) -> str:
+        """V3.0 프롬프트 생성 - 보고서는 V3.0, 이메일은 V2.0 유지"""
+        # 이메일은 V2.0 사용 (이미 성공적)
+        if test_case.category == "email":
+            return self._generate_v2_prompt(test_case)
+
+        # 보고서는 V3.0 사용 (동적 섹션 생성)
+        if test_case.subcategory == "weekly":
+            return get_weekly_report_prompt_v3(
+                reporter_name="김철수 과장",
+                department=test_case.industry,
+                report_to="팀장",
+                period_start="2024-01-15",
+                period_end="2024-01-19",
+                report_period="주간",
+                raw_content=test_case.input_context,
+                achievements="주요 업무 완료",
+                issues="특별 이슈 없음",
+                next_plans="다음 주 계획",
+                expected_elements=test_case.expected_elements
+            )
+        elif test_case.subcategory == "analysis":
+            return get_analysis_report_prompt_v3(
+                analysis_title=test_case.scenario,
+                analyst_name="김철수 과장",
+                analysis_period="2024년 1월",
+                analysis_scope=test_case.industry,
+                background="시장 환경 변화",
+                objectives="전략 수립",
+                data_sources="내부 데이터, 시장 조사",
+                analysis_results=test_case.input_context,
+                expected_elements=test_case.expected_elements
+            )
+        elif test_case.subcategory == "meeting":
+            return get_meeting_minutes_prompt_v3(
+                meeting_title=test_case.scenario,
+                meeting_datetime="2024-01-20 14:00",
+                meeting_location="회의실 A",
+                attendees="관련 팀원",
+                absentees="없음",
+                meeting_purpose="업무 논의",
+                recorder="김철수",
+                meeting_content=test_case.input_context,
+                discussion_points="주요 안건",
+                decisions="결정 사항",
+                expected_elements=test_case.expected_elements
+            )
+        else:  # project
+            return get_project_proposal_prompt_v3(
+                project_title=test_case.scenario,
+                proposer_name="김철수",
+                proposer_department=test_case.industry,
+                background=test_case.input_context,
+                current_situation="현재 상황",
+                proposal_details="제안 내용",
+                expected_benefits="기대 효과",
+                required_resources="인력 배정 예정",
+                timeline="3개월",
+                expected_elements=test_case.expected_elements
+            )
+
     def run_single_experiment(self, test_case: BusinessTestCase) -> Dict:
         """
         단일 실험 실행
@@ -300,10 +492,22 @@ class BusinessExperimentRunner:
             전체 실험 결과 요약
         """
         print("=" * 70)
-        print("비즈니스 문서 프롬프트 108회 실험")
+        print(f"비즈니스 문서 프롬프트 실험 ({self.prompt_version.upper()})")
+        print("=" * 70)
+        if self.prompt_version == "v3":
+            print("  V3.0 핵심: 동적 섹션 생성 (보고서 V3.0 + 이메일 V2.0)")
+            print("  - expected_elements → 출력 섹션 제목으로 직접 변환")
+            print("  - '⚠️ 중요: 다음 섹션을 반드시 포함' 강제 지시")
+            print("  - 섹션별 체크리스트로 검증")
+        elif self.prompt_version == "v2":
+            print("  V2.0 핵심: 독자 중심 글쓰기 + 피라미드 원칙")
+            print("  - 4단계 STEP 구조 (분석 → 설계 → 작성 → 검토)")
+            print("  - expected_elements를 프롬프트에 명시")
+            print("  - So What? 검증 단계 포함")
         print("=" * 70)
         print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"모델: {self.model}")
+        print(f"프롬프트 버전: {self.prompt_version}")
         print(f"실험 횟수: {limit}회")
         print()
 
@@ -428,13 +632,25 @@ class BusinessExperimentRunner:
 
 def main():
     """메인 실행 함수"""
-    runner = BusinessExperimentRunner(model="qwen2.5:7b")
+    import sys
 
-    # 108회 실험 실행
-    summary = runner.run_all_experiments(limit=108)
+    # 명령행 인자로 버전 선택 (기본: v2)
+    prompt_version = "v2"
+    limit = 30  # 기본 30회
+
+    if len(sys.argv) > 1:
+        prompt_version = sys.argv[1]
+    if len(sys.argv) > 2:
+        limit = int(sys.argv[2])
+
+    print(f"\n[INFO] 프롬프트 버전: {prompt_version.upper()}")
+    runner = BusinessExperimentRunner(model="qwen2.5:7b", prompt_version=prompt_version)
+
+    # 실험 실행
+    summary = runner.run_all_experiments(limit=limit)
 
     print()
-    print("108회 실험 완료!")
+    print(f"{limit}회 {prompt_version.upper()} 실험 완료!")
 
 
 if __name__ == "__main__":
