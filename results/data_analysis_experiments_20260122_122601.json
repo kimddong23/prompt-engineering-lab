@@ -1,0 +1,703 @@
+{
+  "summary": {
+    "total_experiments": 30,
+    "successful": 30,
+    "success_rate": 100.0,
+    "avg_quality": 9.7,
+    "avg_tokens": 3112.0,
+    "category_stats": {
+      "interpretation": {
+        "count": 10,
+        "total_quality": 96.0,
+        "total_tokens": 34803,
+        "element_coverages": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          50.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "avg_quality": 9.6,
+        "avg_tokens": 3480.0,
+        "avg_element_coverage": 95.0
+      },
+      "insight": {
+        "count": 10,
+        "total_quality": 100.0,
+        "total_tokens": 32349,
+        "element_coverages": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "avg_quality": 10.0,
+        "avg_tokens": 3235.0,
+        "avg_element_coverage": 100.0
+      },
+      "visualization": {
+        "count": 10,
+        "total_quality": 95.0,
+        "total_tokens": 26218,
+        "element_coverages": [
+          100.0,
+          100.0,
+          25.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "avg_quality": 9.5,
+        "avg_tokens": 2622.0,
+        "avg_element_coverage": 92.5
+      }
+    }
+  },
+  "results": [
+    {
+      "test_case_id": "INT-001",
+      "category": "interpretation",
+      "subcategory": "sales",
+      "scenario": "월별 매출 데이터 해석",
+      "success": true,
+      "error": null,
+      "response_time": 21.61,
+      "input_tokens": 1123,
+      "output_tokens": 1908,
+      "total_tokens": 3031,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INT-002",
+      "category": "interpretation",
+      "subcategory": "marketing",
+      "scenario": "마케팅 채널별 성과 분석",
+      "success": true,
+      "error": null,
+      "response_time": 20.64,
+      "input_tokens": 1122,
+      "output_tokens": 2223,
+      "total_tokens": 3345,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INT-003",
+      "category": "interpretation",
+      "subcategory": "hr",
+      "scenario": "직원 이직률 데이터 분석",
+      "success": true,
+      "error": null,
+      "response_time": 23.37,
+      "input_tokens": 1159,
+      "output_tokens": 2615,
+      "total_tokens": 3774,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INT-004",
+      "category": "interpretation",
+      "subcategory": "finance",
+      "scenario": "비용 구조 분석",
+      "success": true,
+      "error": null,
+      "response_time": 29.65,
+      "input_tokens": 1116,
+      "output_tokens": 3244,
+      "total_tokens": 4360,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INT-005",
+      "category": "interpretation",
+      "subcategory": "product",
+      "scenario": "제품별 수익성 분석",
+      "success": true,
+      "error": null,
+      "response_time": 16.64,
+      "input_tokens": 1120,
+      "output_tokens": 1767,
+      "total_tokens": 2887,
+      "quality_evaluation": {
+        "quality_score": 6.0,
+        "element_coverage": 50.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": false,
+        "found_elements": 2,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INS-001",
+      "category": "insight",
+      "subcategory": "customer",
+      "scenario": "고객 세그먼트 분석",
+      "success": true,
+      "error": null,
+      "response_time": 19.9,
+      "input_tokens": 1192,
+      "output_tokens": 2299,
+      "total_tokens": 3491,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INS-002",
+      "category": "insight",
+      "subcategory": "trend",
+      "scenario": "시장 트렌드 분석",
+      "success": true,
+      "error": null,
+      "response_time": 15.13,
+      "input_tokens": 1176,
+      "output_tokens": 1760,
+      "total_tokens": 2936,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INS-003",
+      "category": "insight",
+      "subcategory": "operation",
+      "scenario": "운영 효율성 분석",
+      "success": true,
+      "error": null,
+      "response_time": 18.88,
+      "input_tokens": 1198,
+      "output_tokens": 2225,
+      "total_tokens": 3423,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INS-004",
+      "category": "insight",
+      "subcategory": "competitor",
+      "scenario": "경쟁사 벤치마킹",
+      "success": true,
+      "error": null,
+      "response_time": 19.91,
+      "input_tokens": 1161,
+      "output_tokens": 2250,
+      "total_tokens": 3411,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "INS-005",
+      "category": "insight",
+      "subcategory": "ab_test",
+      "scenario": "A/B 테스트 결과 해석",
+      "success": true,
+      "error": null,
+      "response_time": 15.61,
+      "input_tokens": 1102,
+      "output_tokens": 1694,
+      "total_tokens": 2796,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "VIS-001",
+      "category": "visualization",
+      "subcategory": "dashboard",
+      "scenario": "경영진 대시보드 설계",
+      "success": true,
+      "error": null,
+      "response_time": 12.21,
+      "input_tokens": 1096,
+      "output_tokens": 1468,
+      "total_tokens": 2564,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "VIS-002",
+      "category": "visualization",
+      "subcategory": "time_series",
+      "scenario": "시계열 데이터 시각화",
+      "success": true,
+      "error": null,
+      "response_time": 12.69,
+      "input_tokens": 1121,
+      "output_tokens": 1517,
+      "total_tokens": 2638,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "VIS-003",
+      "category": "visualization",
+      "subcategory": "comparison",
+      "scenario": "비교 분석 시각화",
+      "success": true,
+      "error": null,
+      "response_time": 11.78,
+      "input_tokens": 1141,
+      "output_tokens": 1426,
+      "total_tokens": 2567,
+      "quality_evaluation": {
+        "quality_score": 5.0,
+        "element_coverage": 25.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": false,
+        "found_elements": 1,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "VIS-004",
+      "category": "visualization",
+      "subcategory": "distribution",
+      "scenario": "분포 데이터 시각화",
+      "success": true,
+      "error": null,
+      "response_time": 11.26,
+      "input_tokens": 1068,
+      "output_tokens": 1352,
+      "total_tokens": 2420,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "VIS-005",
+      "category": "visualization",
+      "subcategory": "funnel",
+      "scenario": "퍼널 분석 시각화",
+      "success": true,
+      "error": null,
+      "response_time": 14.28,
+      "input_tokens": 1106,
+      "output_tokens": 1563,
+      "total_tokens": 2669,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-016",
+      "category": "interpretation",
+      "subcategory": "marketing",
+      "scenario": "마케팅 채널별 성과 분석 (변형 16)",
+      "success": true,
+      "error": null,
+      "response_time": 19.48,
+      "input_tokens": 1129,
+      "output_tokens": 2077,
+      "total_tokens": 3206,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-017",
+      "category": "interpretation",
+      "subcategory": "hr",
+      "scenario": "직원 이직률 데이터 분석 (변형 17)",
+      "success": true,
+      "error": null,
+      "response_time": 23.14,
+      "input_tokens": 1166,
+      "output_tokens": 2646,
+      "total_tokens": 3812,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-018",
+      "category": "interpretation",
+      "subcategory": "finance",
+      "scenario": "비용 구조 분석 (변형 18)",
+      "success": true,
+      "error": null,
+      "response_time": 22.89,
+      "input_tokens": 1123,
+      "output_tokens": 2560,
+      "total_tokens": 3683,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-019",
+      "category": "interpretation",
+      "subcategory": "product",
+      "scenario": "제품별 수익성 분석 (변형 19)",
+      "success": true,
+      "error": null,
+      "response_time": 26.9,
+      "input_tokens": 1127,
+      "output_tokens": 2643,
+      "total_tokens": 3770,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-020",
+      "category": "insight",
+      "subcategory": "customer",
+      "scenario": "고객 세그먼트 분석 (변형 20)",
+      "success": true,
+      "error": null,
+      "response_time": 22.17,
+      "input_tokens": 1199,
+      "output_tokens": 2616,
+      "total_tokens": 3815,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-021",
+      "category": "insight",
+      "subcategory": "trend",
+      "scenario": "시장 트렌드 분석 (변형 21)",
+      "success": true,
+      "error": null,
+      "response_time": 18.03,
+      "input_tokens": 1183,
+      "output_tokens": 2183,
+      "total_tokens": 3366,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-022",
+      "category": "insight",
+      "subcategory": "operation",
+      "scenario": "운영 효율성 분석 (변형 22)",
+      "success": true,
+      "error": null,
+      "response_time": 16.46,
+      "input_tokens": 1205,
+      "output_tokens": 1921,
+      "total_tokens": 3126,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-023",
+      "category": "insight",
+      "subcategory": "competitor",
+      "scenario": "경쟁사 벤치마킹 (변형 23)",
+      "success": true,
+      "error": null,
+      "response_time": 14.66,
+      "input_tokens": 1168,
+      "output_tokens": 1679,
+      "total_tokens": 2847,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-024",
+      "category": "insight",
+      "subcategory": "ab_test",
+      "scenario": "A/B 테스트 결과 해석 (변형 24)",
+      "success": true,
+      "error": null,
+      "response_time": 18.5,
+      "input_tokens": 1109,
+      "output_tokens": 2029,
+      "total_tokens": 3138,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-025",
+      "category": "visualization",
+      "subcategory": "dashboard",
+      "scenario": "경영진 대시보드 설계 (변형 25)",
+      "success": true,
+      "error": null,
+      "response_time": 12.17,
+      "input_tokens": 1103,
+      "output_tokens": 1462,
+      "total_tokens": 2565,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-026",
+      "category": "visualization",
+      "subcategory": "time_series",
+      "scenario": "시계열 데이터 시각화 (변형 26)",
+      "success": true,
+      "error": null,
+      "response_time": 10.74,
+      "input_tokens": 1128,
+      "output_tokens": 1232,
+      "total_tokens": 2360,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-027",
+      "category": "visualization",
+      "subcategory": "comparison",
+      "scenario": "비교 분석 시각화 (변형 27)",
+      "success": true,
+      "error": null,
+      "response_time": 16.33,
+      "input_tokens": 1148,
+      "output_tokens": 1843,
+      "total_tokens": 2991,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-028",
+      "category": "visualization",
+      "subcategory": "distribution",
+      "scenario": "분포 데이터 시각화 (변형 28)",
+      "success": true,
+      "error": null,
+      "response_time": 16.1,
+      "input_tokens": 1075,
+      "output_tokens": 1628,
+      "total_tokens": 2703,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-029",
+      "category": "visualization",
+      "subcategory": "funnel",
+      "scenario": "퍼널 분석 시각화 (변형 29)",
+      "success": true,
+      "error": null,
+      "response_time": 14.76,
+      "input_tokens": 1113,
+      "output_tokens": 1628,
+      "total_tokens": 2741,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    },
+    {
+      "test_case_id": "GEN-030",
+      "category": "interpretation",
+      "subcategory": "sales",
+      "scenario": "월별 매출 데이터 해석 (변형 30)",
+      "success": true,
+      "error": null,
+      "response_time": 16.03,
+      "input_tokens": 1130,
+      "output_tokens": 1805,
+      "total_tokens": 2935,
+      "quality_evaluation": {
+        "quality_score": 10.0,
+        "element_coverage": 100.0,
+        "has_structure": true,
+        "has_numbers": true,
+        "has_recommendations": true,
+        "found_elements": 4,
+        "total_elements": 4
+      }
+    }
+  ]
+}

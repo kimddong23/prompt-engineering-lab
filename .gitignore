@@ -48,9 +48,11 @@ ai_env/
 Thumbs.db
 
 # Project specific
-results/*.json
-!results/.gitkeep
 *.log
+
+# Claude Code settings (개인 설정 파일)
+CLAUDE.md
+.claude/
 
 # ChromaDB
 chroma_db/

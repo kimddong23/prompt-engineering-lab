@@ -1,0 +1,1091 @@
+{
+  "summary": {
+    "total": 108,
+    "success_rate": 100.0,
+    "avg_quality": 8.18824074074074,
+    "avg_tokens": 1873.462962962963,
+    "avg_time": 11.150277777777777
+  },
+  "results": [
+    {
+      "id": "CODE-001",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1149,
+      "time": 10.09
+    },
+    {
+      "id": "CODE-002",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1616,
+      "time": 9.36
+    },
+    {
+      "id": "CODE-003",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1407,
+      "time": 6.98
+    },
+    {
+      "id": "CODE-004",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1456,
+      "time": 7.33
+    },
+    {
+      "id": "CODE-005",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1545,
+      "time": 8.11
+    },
+    {
+      "id": "CODE-006",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1352,
+      "time": 7.05
+    },
+    {
+      "id": "CODE-007",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1517,
+      "time": 8.31
+    },
+    {
+      "id": "CODE-008",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1291,
+      "time": 6.57
+    },
+    {
+      "id": "CODE-009",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1226,
+      "time": 5.73
+    },
+    {
+      "id": "CODE-010",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1384,
+      "time": 6.9
+    },
+    {
+      "id": "CODE-011",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1409,
+      "time": 7.2
+    },
+    {
+      "id": "CODE-012",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1517,
+      "time": 8.14
+    },
+    {
+      "id": "CODE-013",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1487,
+      "time": 8.07
+    },
+    {
+      "id": "CODE-014",
+      "category": "code_review",
+      "subcategory": "general",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1562,
+      "time": 8.91
+    },
+    {
+      "id": "CODE-015",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1697,
+      "time": 9.69
+    },
+    {
+      "id": "CODE-016",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1639,
+      "time": 9.29
+    },
+    {
+      "id": "CODE-017",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1460,
+      "time": 7.37
+    },
+    {
+      "id": "CODE-018",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1764,
+      "time": 10.04
+    },
+    {
+      "id": "CODE-019",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2074,
+      "time": 13.62
+    },
+    {
+      "id": "CODE-020",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1508,
+      "time": 8.44
+    },
+    {
+      "id": "CODE-021",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1558,
+      "time": 8.06
+    },
+    {
+      "id": "CODE-022",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1146,
+      "time": 4.71
+    },
+    {
+      "id": "CODE-023",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1547,
+      "time": 8.07
+    },
+    {
+      "id": "CODE-024",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1431,
+      "time": 7.38
+    },
+    {
+      "id": "CODE-025",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2420,
+      "time": 16.44
+    },
+    {
+      "id": "CODE-026",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1328,
+      "time": 6.23
+    },
+    {
+      "id": "CODE-027",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1465,
+      "time": 7.16
+    },
+    {
+      "id": "CODE-028",
+      "category": "code_review",
+      "subcategory": "security",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1249,
+      "time": 5.67
+    },
+    {
+      "id": "CODE-029",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 100.0,
+      "tokens": 1757,
+      "time": 9.57
+    },
+    {
+      "id": "CODE-030",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 5.33,
+      "detection_rate": 33.3,
+      "tokens": 1671,
+      "time": 8.45
+    },
+    {
+      "id": "CODE-031",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 75.0,
+      "tokens": 1792,
+      "time": 10.22
+    },
+    {
+      "id": "CODE-032",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 5.33,
+      "detection_rate": 33.3,
+      "tokens": 1782,
+      "time": 9.42
+    },
+    {
+      "id": "CODE-033",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 100.0,
+      "tokens": 1714,
+      "time": 9.58
+    },
+    {
+      "id": "CODE-034",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 8.67,
+      "detection_rate": 66.7,
+      "tokens": 1730,
+      "time": 9.72
+    },
+    {
+      "id": "CODE-035",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1589,
+      "time": 7.86
+    },
+    {
+      "id": "CODE-036",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1888,
+      "time": 10.28
+    },
+    {
+      "id": "CODE-037",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1652,
+      "time": 8.64
+    },
+    {
+      "id": "CODE-038",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1903,
+      "time": 10.57
+    },
+    {
+      "id": "CODE-039",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 100.0,
+      "tokens": 1884,
+      "time": 11.16
+    },
+    {
+      "id": "CODE-040",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 6.67,
+      "detection_rate": 66.7,
+      "tokens": 1700,
+      "time": 9.43
+    },
+    {
+      "id": "CODE-041",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 100.0,
+      "tokens": 1814,
+      "time": 10.24
+    },
+    {
+      "id": "CODE-042",
+      "category": "code_review",
+      "subcategory": "performance",
+      "success": true,
+      "quality": 7.33,
+      "detection_rate": 33.3,
+      "tokens": 1811,
+      "time": 10.2
+    },
+    {
+      "id": "CODE-043",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 2967,
+      "time": 21.67
+    },
+    {
+      "id": "CODE-044",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2832,
+      "time": 20.74
+    },
+    {
+      "id": "CODE-045",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 3090,
+      "time": 22.8
+    },
+    {
+      "id": "CODE-046",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 3482,
+      "time": 26.67
+    },
+    {
+      "id": "CODE-047",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2448,
+      "time": 16.03
+    },
+    {
+      "id": "CODE-048",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 3385,
+      "time": 25.31
+    },
+    {
+      "id": "CODE-049",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2990,
+      "time": 21.18
+    },
+    {
+      "id": "CODE-050",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 2650,
+      "time": 16.8
+    },
+    {
+      "id": "CODE-051",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 2492,
+      "time": 15.76
+    },
+    {
+      "id": "CODE-052",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 3382,
+      "time": 26.25
+    },
+    {
+      "id": "CODE-053",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2584,
+      "time": 17.69
+    },
+    {
+      "id": "CODE-054",
+      "category": "code_review",
+      "subcategory": "refactoring",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2431,
+      "time": 15.23
+    },
+    {
+      "id": "DOC-001",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1667,
+      "time": 9.75
+    },
+    {
+      "id": "DOC-002",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1551,
+      "time": 8.63
+    },
+    {
+      "id": "DOC-003",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1592,
+      "time": 9.03
+    },
+    {
+      "id": "DOC-004",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1564,
+      "time": 9.03
+    },
+    {
+      "id": "DOC-005",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1635,
+      "time": 9.48
+    },
+    {
+      "id": "DOC-006",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1597,
+      "time": 9.17
+    },
+    {
+      "id": "DOC-007",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1585,
+      "time": 8.79
+    },
+    {
+      "id": "DOC-008",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1578,
+      "time": 8.83
+    },
+    {
+      "id": "DOC-009",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1594,
+      "time": 9.19
+    },
+    {
+      "id": "DOC-010",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1565,
+      "time": 8.84
+    },
+    {
+      "id": "DOC-011",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1593,
+      "time": 10.05
+    },
+    {
+      "id": "DOC-012",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1603,
+      "time": 9.95
+    },
+    {
+      "id": "DOC-013",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1578,
+      "time": 8.95
+    },
+    {
+      "id": "DOC-014",
+      "category": "documentation",
+      "subcategory": "api",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 1606,
+      "time": 9.14
+    },
+    {
+      "id": "DOC-015",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 5.0,
+      "detection_rate": 25.0,
+      "tokens": 1580,
+      "time": 7.88
+    },
+    {
+      "id": "DOC-016",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1869,
+      "time": 10.81
+    },
+    {
+      "id": "DOC-017",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1748,
+      "time": 9.27
+    },
+    {
+      "id": "DOC-018",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1934,
+      "time": 11.72
+    },
+    {
+      "id": "DOC-019",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 5.0,
+      "detection_rate": 25.0,
+      "tokens": 2034,
+      "time": 12.4
+    },
+    {
+      "id": "DOC-020",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 50.0,
+      "tokens": 1905,
+      "time": 11.49
+    },
+    {
+      "id": "DOC-021",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1857,
+      "time": 6.43
+    },
+    {
+      "id": "DOC-022",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1764,
+      "time": 13.46
+    },
+    {
+      "id": "DOC-023",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 4.0,
+      "detection_rate": 0.0,
+      "tokens": 1590,
+      "time": 8.01
+    },
+    {
+      "id": "DOC-024",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1637,
+      "time": 8.36
+    },
+    {
+      "id": "DOC-025",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1734,
+      "time": 9.45
+    },
+    {
+      "id": "DOC-026",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 50.0,
+      "tokens": 1744,
+      "time": 9.09
+    },
+    {
+      "id": "DOC-027",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 0.0,
+      "tokens": 1606,
+      "time": 8.45
+    },
+    {
+      "id": "DOC-028",
+      "category": "documentation",
+      "subcategory": "readme",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 1840,
+      "time": 10.91
+    },
+    {
+      "id": "DOC-029",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 75.0,
+      "tokens": 1198,
+      "time": 7.91
+    },
+    {
+      "id": "DOC-030",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 50.0,
+      "tokens": 1547,
+      "time": 11.69
+    },
+    {
+      "id": "DOC-031",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1049,
+      "time": 6.02
+    },
+    {
+      "id": "DOC-032",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 75.0,
+      "tokens": 1727,
+      "time": 12.03
+    },
+    {
+      "id": "DOC-033",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 50.0,
+      "tokens": 1235,
+      "time": 8.16
+    },
+    {
+      "id": "DOC-034",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 5.0,
+      "detection_rate": 25.0,
+      "tokens": 1138,
+      "time": 7.75
+    },
+    {
+      "id": "DOC-035",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 100.0,
+      "tokens": 1239,
+      "time": 7.43
+    },
+    {
+      "id": "DOC-036",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 75.0,
+      "tokens": 883,
+      "time": 4.7
+    },
+    {
+      "id": "DOC-037",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 1279,
+      "time": 8.21
+    },
+    {
+      "id": "DOC-038",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 5.0,
+      "detection_rate": 25.0,
+      "tokens": 1245,
+      "time": 8.45
+    },
+    {
+      "id": "DOC-039",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 6.0,
+      "detection_rate": 50.0,
+      "tokens": 1184,
+      "time": 7.25
+    },
+    {
+      "id": "DOC-040",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 1265,
+      "time": 8.6
+    },
+    {
+      "id": "DOC-041",
+      "category": "documentation",
+      "subcategory": "comments",
+      "success": true,
+      "quality": 4.0,
+      "detection_rate": 0.0,
+      "tokens": 1218,
+      "time": 7.73
+    },
+    {
+      "id": "DOC-042",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2907,
+      "time": 17.64
+    },
+    {
+      "id": "DOC-043",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2927,
+      "time": 17.84
+    },
+    {
+      "id": "DOC-044",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 3076,
+      "time": 18.85
+    },
+    {
+      "id": "DOC-045",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2972,
+      "time": 17.39
+    },
+    {
+      "id": "DOC-046",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 7.0,
+      "detection_rate": 25.0,
+      "tokens": 2631,
+      "time": 14.67
+    },
+    {
+      "id": "DOC-047",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2543,
+      "time": 14.03
+    },
+    {
+      "id": "DOC-048",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2768,
+      "time": 15.38
+    },
+    {
+      "id": "DOC-049",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2775,
+      "time": 15.42
+    },
+    {
+      "id": "DOC-050",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 3289,
+      "time": 20.86
+    },
+    {
+      "id": "DOC-051",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 8.0,
+      "detection_rate": 50.0,
+      "tokens": 3013,
+      "time": 18.73
+    },
+    {
+      "id": "DOC-052",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 2694,
+      "time": 14.5
+    },
+    {
+      "id": "DOC-053",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 10.0,
+      "detection_rate": 100.0,
+      "tokens": 2640,
+      "time": 14.68
+    },
+    {
+      "id": "DOC-054",
+      "category": "documentation",
+      "subcategory": "architecture",
+      "success": true,
+      "quality": 9.0,
+      "detection_rate": 75.0,
+      "tokens": 3118,
+      "time": 19.36
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "experiment": "comprehensive_prompt_engineering",
+  "timestamp": "2026-01-19T23:59:40.074527",
+  "model": "qwen2.5:7b",
+  "total_experiments": 10,
+  "results": {
+    "1. 기본 vs 구조화 (단순)": {
+      "기본": {
+        "accuracy": "100.0%",
+        "correct": 10,
+        "total": 10
+      },
+      "구조화": {
+        "accuracy": "100.0%",
+        "correct": 10,
+        "total": 10
+      }
+    },
+    "2. 기본 vs 구조화 (복잡)": {
+      "기본": {
+        "accuracy": "93.3%",
+        "correct": 14,
+        "total": 15
+      },
+      "구조화": {
+        "accuracy": "73.3%",
+        "correct": 11,
+        "total": 15
+      }
+    },
+    "3. Chain of Thought": {
+      "기본": {
+        "accuracy": "93.3%",
+        "correct": 14,
+        "total": 15
+      },
+      "CoT": {
+        "accuracy": "100.0%",
+        "correct": 15,
+        "total": 15
+      }
+    },
+    "4. Zero-shot vs Few-shot": {
+      "Zero-shot": {
+        "accuracy": "100.0%",
+        "correct": 15,
+        "total": 15
+      },
+      "Few-shot (3예시)": {
+        "accuracy": "100.0%",
+        "correct": 15,
+        "total": 15
+      }
+    },
+    "5. Few-shot 예시 개수": {
+      "1-shot": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      },
+      "3-shot": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      },
+      "5-shot": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      }
+    },
+    "6. 역할 부여": {
+      "역할 없음": {
+        "accuracy": "91.7%",
+        "correct": 11,
+        "total": 12
+      },
+      "수학 선생님": {
+        "accuracy": "58.3%",
+        "correct": 7,
+        "total": 12
+      },
+      "교육 전문가": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      }
+    },
+    "7. 출력 형식": {
+      "자유형": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      },
+      "JSON 형식": {
+        "accuracy": "100.0%",
+        "correct": 12,
+        "total": 12
+      }
+    },
+    "8. 프롬프트 길이": {
+      "짧은": {
+        "accuracy": "70.0%",
+        "correct": 7,
+        "total": 10
+      },
+      "중간": {
+        "accuracy": "70.0%",
+        "correct": 7,
+        "total": 10
+      },
+      "긴": {
+        "accuracy": "100.0%",
+        "correct": 10,
+        "total": 10
+      }
+    },
+    "9. Self-Consistency": {
+      "단일 실행": {
+        "accuracy": "100.0%",
+        "correct": 8,
+        "total": 8
+      },
+      "3회 다수결": {
+        "accuracy": "100.0%",
+        "correct": 8,
+        "total": 8
+      }
+    },
+    "10. 종합 최적화": {
+      "기본": {
+        "accuracy": "93.3%",
+        "correct": 14,
+        "total": 15
+      },
+      "종합 최적화": {
+        "accuracy": "100.0%",
+        "correct": 15,
+        "total": 15
+      }
+    }
+  }
+}

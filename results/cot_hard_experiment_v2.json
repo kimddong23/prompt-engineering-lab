@@ -1,0 +1,39 @@
+{
+  "experiment": "CoT_hard_problems_v2",
+  "timestamp": "2026-01-19T23:14:33.894542",
+  "model": "qwen2.5:7b",
+  "test_cases_count": 26,
+  "evaluation_criteria": {
+    "exact": "응답이 정답과 정확히 일치",
+    "contains": "응답에 정답이 포함됨",
+    "correct": "정답 포함 또는 추출된 답이 일치"
+  },
+  "results": {
+    "기본": {
+      "exact_accuracy": "0.0%",
+      "contains_accuracy": "92.3%",
+      "correct_accuracy": "92.3%",
+      "avg_tokens": 169,
+      "avg_time": "1.09s"
+    },
+    "구조화": {
+      "exact_accuracy": "65.4%",
+      "contains_accuracy": "73.1%",
+      "correct_accuracy": "73.1%",
+      "avg_tokens": 71,
+      "avg_time": "0.13s"
+    },
+    "CoT": {
+      "exact_accuracy": "0.0%",
+      "contains_accuracy": "100.0%",
+      "correct_accuracy": "100.0%",
+      "avg_tokens": 300,
+      "avg_time": "1.92s"
+    }
+  },
+  "conclusion": {
+    "cot_vs_basic": "+7.7%p",
+    "cot_vs_structured": "+26.9%p",
+    "token_overhead": "+77%"
+  }
+}

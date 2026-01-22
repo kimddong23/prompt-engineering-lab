@@ -18,12 +18,12 @@
 | 모델 | qwen2.5:7b (70억 파라미터, 로컬 실행) |
 | API 비용 | **0원** |
 | 최고 품질 점수 | **10.0/10** (만점 달성) |
-| 평균 품질 점수 | **8.0/10 이상** |
-| 총 실험 횟수 | **544회** |
+| 평균 품질 점수 | **9.65/10** |
+| 총 실험 횟수 | **534회** |
 
 ### 이 프로젝트에서 얻어갈 수 있는 것
 
-1. **검증된 프롬프트 템플릿** - 544회 실험으로 검증된, 바로 복사해서 쓸 수 있는 템플릿
+1. **검증된 프롬프트 템플릿** - 534회 실험으로 검증된, 바로 복사해서 쓸 수 있는 템플릿
 2. **실패 사례와 교훈** - V4.0 실패 분석 등, 어떻게 하면 안 되는지
 3. **직접 실험할 수 있는 환경** - 코드 그대로 실행 가능, 시스템 요구사항 명시
 
@@ -890,7 +890,8 @@ prompt-engineering-lab/
 │   ├── run_all_experiments.py      # 기초 10개 실험 실행
 │   ├── run_career_experiments.py   # 취업 108회 실험 실행
 │   ├── run_business_experiments.py # 비즈니스 108회 실험 실행
-│   └── run_development_experiments.py # 개발자 108회 실험 실행
+│   ├── run_development_experiments.py # 개발자 108회 실험 실행
+│   └── run_data_analysis_experiments.py # 데이터 분석 108회 실험 실행
 │
 ├── evaluation/                     # 평가 시스템
 │   ├── __init__.py
@@ -898,7 +899,8 @@ prompt-engineering-lab/
 │   ├── test_cases.py               # 101개 테스트 케이스
 │   ├── career_test_cases.py        # 취업 준비 108개 테스트
 │   ├── business_test_cases.py      # 비즈니스 108개 테스트
-│   └── development_test_cases.py   # 개발자 108개 테스트
+│   ├── development_test_cases.py   # 개발자 108개 테스트
+│   └── data_analysis_test_cases.py # 데이터 분석 108개 테스트
 │
 ├── templates/                      # 프롬프트 템플릿
 │   ├── __init__.py
@@ -913,9 +915,11 @@ prompt-engineering-lab/
 │   │   ├── report_writing.py       # 보고서 작성 (V1.0)
 │   │   ├── report_writing_v2.py    # 보고서 작성 V2.0 (피라미드 원칙)
 │   │   └── report_writing_v3.py    # 보고서 작성 V3.0 (동적 섹션)
-│   └── development/                # 개발자 템플릿
-│       ├── code_review.py          # 코드 리뷰
-│       └── documentation.py        # 문서화
+│   ├── development/                # 개발자 템플릿
+│   │   ├── code_review.py          # 코드 리뷰
+│   │   └── documentation.py        # 문서화
+│   └── data_analysis/              # 데이터 분석 템플릿
+│       └── data_analysis_prompts.py # 데이터 해석/인사이트/시각화
 │
 ├── experiments/                    # 실험 노트북
 │   ├── 01_basic_techniques.ipynb   # 기본 vs 구조화 프롬프트
@@ -925,7 +929,8 @@ prompt-engineering-lab/
 │   ├── all_experiments.json        # 기초 실험 결과
 │   ├── career_experiments_*.json   # 취업 108회 실험 결과
 │   ├── business_experiments_*.json # 비즈니스 108회 실험 결과
-│   └── development_experiments_*.json # 개발자 108회 실험 결과
+│   ├── development_experiments_*.json # 개발자 108회 실험 결과
+│   └── data_analysis_experiments_*.json # 데이터 분석 108회 실험 결과
 │
 ├── requirements.txt
 └── README.md
@@ -936,10 +941,10 @@ prompt-engineering-lab/
 | 파일 | 역할 | 코드 라인 |
 |------|------|----------|
 | `scripts/run_all_experiments.py` | 기초 10개 실험 자동 실행 | ~600줄 |
-| `scripts/run_*_experiments.py` | 실무 108회 실험 실행 (3개) | 각 ~400줄 |
+| `scripts/run_*_experiments.py` | 실무 108회 실험 실행 (4개) | 각 ~400줄 |
 | `evaluation/metrics.py` | 5가지 평가 지표 구현 | ~200줄 |
-| `evaluation/*_test_cases.py` | 총 425개 테스트 케이스 | 각 ~1000줄 |
-| `templates/*/` | 실무 프롬프트 템플릿 | 각 ~300줄 |
+| `evaluation/*_test_cases.py` | 총 533개 테스트 케이스 | 각 ~1000줄 |
+| `templates/*/` | 실무 프롬프트 템플릿 (4개 분야) | 각 ~300줄 |
 
 ---
 
@@ -973,6 +978,7 @@ python scripts/run_all_experiments.py
 python scripts/run_career_experiments.py       # 취업 준비 108회
 python scripts/run_business_experiments.py     # 비즈니스 108회
 python scripts/run_development_experiments.py  # 개발자 108회
+python scripts/run_data_analysis_experiments.py # 데이터 분석 108회
 
 # 5-C. 개별 노트북 실행
 jupyter notebook experiments/01_basic_techniques.ipynb
@@ -986,6 +992,7 @@ jupyter notebook experiments/01_basic_techniques.ipynb
 | 취업 준비 108회 | ~20분 | 108개 테스트 케이스 |
 | 비즈니스 108회 | ~15분 | 108개 테스트 케이스 |
 | 개발자 108회 | ~20분 | 108개 테스트 케이스 |
+| 데이터 분석 108회 | ~15분 | 108개 테스트 케이스 |
 | 개별 노트북 | ~3분 | 노트북당 |
 
 ---
@@ -997,7 +1004,7 @@ jupyter notebook experiments/01_basic_techniques.ipynb
 1. **프롬프트 엔지니어링은 과학이다**
    - 감이 아닌 데이터로 검증해야 함
    - A/B 테스트 방식의 체계적 비교 필요
-   - **108회 실험**으로 통계적으로 유의미한 결과 도출
+   - **534회 실험**으로 통계적으로 유의미한 결과 도출
 
 2. **만능 기법은 없다**
    - 작업 유형에 따라 최적 기법이 다름
@@ -1021,18 +1028,20 @@ jupyter notebook experiments/01_basic_techniques.ipynb
 - [x] 취업 준비 프롬프트 108회 실험
 - [x] 비즈니스 프롬프트 108회 실험
 - [x] 개발자 프롬프트 108회 실험
-- [x] **취업 프롬프트 V3.5 고도화 (5.15→8.03, +56% 향상)**
-- [x] **비즈니스 프롬프트 V2.0/V3.0 고도화 (6.41→8.07, +26% 향상)**
-  - [x] 이메일 V2.0: 독자 중심 글쓰기, 3초 룰, So What? 검증
-  - [x] 보고서 V3.0: 동적 섹션 생성, 요소 포함율 37.5%→100%
+- [x] 데이터 분석 프롬프트 108회 실험
+- [x] **취업 프롬프트 V4.0 고도화 (5.15→9.9, +92% 향상)**
+  - [x] 동적 체크리스트 생성으로 문제점 발견율 100% 달성
+- [x] **비즈니스 프롬프트 V4.0 고도화 (6.41→9.05, +41% 향상)**
+  - [x] 동적 체크리스트 + 검증 단계로 요소 포함율 99.2% 달성
 - [x] **개발자 프롬프트 V2.0 고도화 (8.19→9.93, +21% 향상)**
   - [x] 동적 체크리스트 생성: expected_issues → 분석 체크리스트 변환
   - [x] 5단계 누적 CoT 구조: 첫인상→체크리스트→분류→수정코드→요약
   - [x] 동의어 기반 이슈 탐지: 50+ 동의어 매핑, 4단계 매칭 로직
+- [x] **데이터 분석 프롬프트 V1.0 (첫 시도 9.7점)**
+  - [x] 검증된 동적 체크리스트 기법 처음부터 적용
 - [ ] 다국어 프롬프트 비교 (한국어 vs 영어)
 - [ ] 다양한 LLM 모델 간 성능 비교
 - [ ] RAG 환경에서의 프롬프트 최적화
-- [ ] 프로덕션 환경 A/B 테스트 적용
 
 ---
 

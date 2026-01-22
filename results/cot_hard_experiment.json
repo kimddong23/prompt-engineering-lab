@@ -1,0 +1,34 @@
+{
+  "experiment": "CoT_hard_problems",
+  "timestamp": "2026-01-19T23:11:49.305420",
+  "model": "qwen2.5:7b",
+  "test_cases_count": 26,
+  "results": [
+    {
+      "method": "기본",
+      "accuracy": "67.3%",
+      "f1": "0.65",
+      "tokens": "70",
+      "latency": "0.37s"
+    },
+    {
+      "method": "구조화",
+      "accuracy": "67.3%",
+      "f1": "0.65",
+      "tokens": "110",
+      "latency": "0.13s"
+    },
+    {
+      "method": "CoT (단계별 사고)",
+      "accuracy": "50.0%",
+      "f1": "0.02",
+      "tokens": "443",
+      "latency": "2.65s"
+    }
+  ],
+  "conclusion": {
+    "best_accuracy_method": "기본",
+    "best_accuracy": "67.3%",
+    "cot_improvement": "-17.3%p"
+  }
+}
