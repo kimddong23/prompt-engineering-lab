@@ -72,11 +72,11 @@ from templates.career.cover_letter_feedback import (
 )
 # V4.0 에이전트형 프롬프트
 from templates.career.resume_feedback_v4 import (
-    get_resume_feedback_prompt_v4
+    get_resume_feedback_prompt_v4,
+    get_cover_letter_feedback_prompt_v4,
+    get_interview_feedback_prompt_v4
 )
-from templates.career.cover_letter_feedback_v4 import (
-    get_cover_letter_feedback_prompt_v4
-)
+# V4 함수들은 resume_feedback_v4.py에 통합됨
 # V3.5 간결한 페르소나 프롬프트
 from templates.career.resume_feedback_v35 import (
     get_resume_feedback_prompt_v35
@@ -372,10 +372,11 @@ class CareerExperimentRunner:
 
         if test_case.category == "resume":
             if self.prompt_version == "v4":
-                # V4.0 에이전트형 프롬프트
+                # V4.0 동적 체크리스트 프롬프트
                 prompt = get_resume_feedback_prompt_v4(
                     resume_content=test_case.input_content,
                     job_position=test_case.job_position,
+                    expected_issues=test_case.expected_issues,
                     company_type=test_case.company_type,
                     experience_level=test_case.experience_level,
                     industry=industry
@@ -400,14 +401,14 @@ class CareerExperimentRunner:
                 )
         elif test_case.category == "cover_letter":
             if self.prompt_version == "v4":
-                # V4.0 에이전트형 프롬프트
+                # V4.0 동적 체크리스트 프롬프트
                 prompt = get_cover_letter_feedback_prompt_v4(
                     cover_letter_content=test_case.input_content,
                     job_position=test_case.job_position,
+                    expected_issues=test_case.expected_issues,
+                    question=test_case.subcategory,
                     company_type=test_case.company_type,
-                    experience_level=test_case.experience_level,
-                    industry=industry,
-                    question_type=test_case.subcategory
+                    experience_level=test_case.experience_level
                 )
             elif self.prompt_version == "v3.5":
                 # V3.5 간결한 페르소나 프롬프트
@@ -429,7 +430,7 @@ class CareerExperimentRunner:
                     company_values="",
                     char_limit=500
                 )
-        else:  # interview - V2.0 면접 코칭 프롬프트 사용
+        else:  # interview
             # 면접 질문 추출 (Q: 로 시작하는 부분)
             interview_question = "면접 질문"
             if "Q:" in test_case.input_content:
@@ -444,12 +445,25 @@ class CareerExperimentRunner:
                 a_start = test_case.input_content.find("A:")
                 answer_content = test_case.input_content[a_start+2:].strip()
 
-            prompt = get_interview_coaching_prompt(
-                answer=answer_content,
-                job_position=test_case.job_position,
-                interview_question=interview_question,
-                question_type=test_case.subcategory  # personality, technical, situational
-            )
+            if self.prompt_version == "v4":
+                # V4.0 동적 체크리스트 프롬프트
+                prompt = get_interview_feedback_prompt_v4(
+                    answer_content=answer_content,
+                    job_position=test_case.job_position,
+                    expected_issues=test_case.expected_issues,
+                    interview_question=interview_question,
+                    question_type=test_case.subcategory,
+                    company_type=test_case.company_type,
+                    experience_level=test_case.experience_level
+                )
+            else:
+                # V3.0/V3.5 프롬프트
+                prompt = get_interview_coaching_prompt(
+                    answer=answer_content,
+                    job_position=test_case.job_position,
+                    interview_question=interview_question,
+                    question_type=test_case.subcategory
+                )
 
         # 실행 및 측정
         start_time = time.time()
