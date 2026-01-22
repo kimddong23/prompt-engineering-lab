@@ -79,6 +79,17 @@ from templates.business.report_writing_v3 import (
     get_meeting_minutes_prompt_v3,
     get_project_proposal_prompt_v3
 )
+# V4.0 프롬프트 (동적 체크리스트 생성)
+from templates.business.business_prompts_v4 import (
+    get_formal_email_prompt_v4,
+    get_apology_email_prompt_v4,
+    get_proposal_email_prompt_v4,
+    get_follow_up_email_prompt_v4,
+    get_weekly_report_prompt_v4,
+    get_analysis_report_prompt_v4,
+    get_meeting_minutes_prompt_v4,
+    get_project_proposal_prompt_v4
+)
 
 
 class BusinessExperimentRunner:
@@ -166,6 +177,9 @@ class BusinessExperimentRunner:
 
     def generate_prompt(self, test_case: BusinessTestCase) -> str:
         """테스트 케이스에 맞는 프롬프트 생성"""
+        # V4.0 프롬프트 (동적 체크리스트 생성)
+        if self.prompt_version == "v4":
+            return self._generate_v4_prompt(test_case)
         # V3.0 프롬프트 (보고서만 V3.0, 이메일은 V2.0 유지)
         if self.prompt_version == "v3":
             return self._generate_v3_prompt(test_case)
@@ -420,6 +434,84 @@ class BusinessExperimentRunner:
                 expected_elements=test_case.expected_elements
             )
 
+    def _generate_v4_prompt(self, test_case: BusinessTestCase) -> str:
+        """V4.0 프롬프트 생성 - 동적 체크리스트 + 5단계 CoT"""
+        if test_case.category == "email":
+            if test_case.subcategory == "formal":
+                return get_formal_email_prompt_v4(
+                    sender_info="김철수 과장 (영업팀)",
+                    recipient_info="이영희 부장 (구매팀)",
+                    email_purpose=test_case.scenario,
+                    main_content=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    desired_action="검토 및 회신",
+                    additional_context=test_case.industry
+                )
+            elif test_case.subcategory == "apology":
+                return get_apology_email_prompt_v4(
+                    sender_info="김철수 팀장",
+                    recipient_info="고객/파트너",
+                    incident_description=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    cause_analysis="내부 프로세스 문제",
+                    corrective_action="즉시 조치 및 재발 방지"
+                )
+            elif test_case.subcategory == "proposal":
+                return get_proposal_email_prompt_v4(
+                    sender_info="김철수 (사업개발팀)",
+                    recipient_info=f"{test_case.industry} 담당자",
+                    proposal_summary=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    benefits="업무 효율 향상 및 비용 절감",
+                    call_to_action="미팅 일정 조율"
+                )
+            else:  # follow_up
+                return get_follow_up_email_prompt_v4(
+                    sender_info="김철수 과장",
+                    recipient_info="이영희 부장",
+                    previous_context=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    follow_up_purpose=test_case.scenario,
+                    next_steps="검토 후 회신 요청"
+                )
+        else:  # report
+            if test_case.subcategory == "weekly":
+                return get_weekly_report_prompt_v4(
+                    reporter_info="김철수 과장 (" + test_case.industry + ")",
+                    period="2024-01-15 ~ 2024-01-19",
+                    achievements=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    issues="특별 이슈 없음",
+                    next_plans="다음 주 계획 진행"
+                )
+            elif test_case.subcategory == "analysis":
+                return get_analysis_report_prompt_v4(
+                    analyst_info="김철수 과장 (기획팀)",
+                    analysis_subject=test_case.scenario,
+                    data_summary=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    methodology="정량/정성 분석",
+                    findings="주요 발견사항"
+                )
+            elif test_case.subcategory == "meeting":
+                return get_meeting_minutes_prompt_v4(
+                    recorder_info="김철수 과장",
+                    meeting_info=test_case.scenario + " (2024-01-20 14:00)",
+                    attendees="관련 팀원 5명",
+                    expected_elements=test_case.expected_elements,
+                    agenda=test_case.scenario,
+                    discussions=test_case.input_context
+                )
+            else:  # project
+                return get_project_proposal_prompt_v4(
+                    proposer_info="김철수 과장 (" + test_case.industry + ")",
+                    project_name=test_case.scenario,
+                    project_summary=test_case.input_context,
+                    expected_elements=test_case.expected_elements,
+                    objectives="목표 달성 및 효율화",
+                    resources="인력 3명, 예산 미정"
+                )
+
     def run_single_experiment(self, test_case: BusinessTestCase) -> Dict:
         """
         단일 실험 실행
@@ -497,8 +589,13 @@ class BusinessExperimentRunner:
         if self.prompt_version == "v3":
             print("  V3.0 핵심: 동적 섹션 생성 (보고서 V3.0 + 이메일 V2.0)")
             print("  - expected_elements → 출력 섹션 제목으로 직접 변환")
-            print("  - '⚠️ 중요: 다음 섹션을 반드시 포함' 강제 지시")
+            print("  - '중요: 다음 섹션을 반드시 포함' 강제 지시")
             print("  - 섹션별 체크리스트로 검증")
+        elif self.prompt_version == "v4":
+            print("  V4.0 핵심: 동적 체크리스트 생성 + 5단계 CoT")
+            print("  - expected_elements → 분석 체크리스트로 변환")
+            print("  - 5단계 구조 (분석 → 설계 → 작성 → 검증 → 출력)")
+            print("  - 요소 검증 단계로 100% 포함율 목표")
         elif self.prompt_version == "v2":
             print("  V2.0 핵심: 독자 중심 글쓰기 + 피라미드 원칙")
             print("  - 4단계 STEP 구조 (분석 → 설계 → 작성 → 검토)")
