@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-데이터 분석 프롬프트 108회 실험
+데이터 분석 프롬프트 V2.0 실험 (8개 카테고리, 80회)
 """
 
 import sys
@@ -24,11 +24,7 @@ from evaluation.data_analysis_test_cases import (
     get_all_data_analysis_test_cases,
     DataAnalysisTestCase
 )
-from templates.data_analysis.data_analysis_prompts import (
-    get_interpretation_prompt,
-    get_insight_prompt,
-    get_visualization_prompt
-)
+from templates.data_analysis.data_analysis_prompts import get_prompt_by_category
 
 
 class DataAnalysisExperimentRunner:
@@ -81,31 +77,15 @@ class DataAnalysisExperimentRunner:
         }
 
     def generate_prompt(self, test_case: DataAnalysisTestCase) -> str:
-        """테스트 케이스에 맞는 프롬프트 생성"""
-        if test_case.category == "interpretation":
-            return get_interpretation_prompt(
-                scenario=test_case.scenario,
-                industry=test_case.industry,
-                data_description=test_case.data_description,
-                raw_data=test_case.raw_data,
-                expected_elements=test_case.expected_elements
-            )
-        elif test_case.category == "insight":
-            return get_insight_prompt(
-                scenario=test_case.scenario,
-                industry=test_case.industry,
-                data_description=test_case.data_description,
-                raw_data=test_case.raw_data,
-                expected_elements=test_case.expected_elements
-            )
-        else:  # visualization
-            return get_visualization_prompt(
-                scenario=test_case.scenario,
-                industry=test_case.industry,
-                data_description=test_case.data_description,
-                raw_data=test_case.raw_data,
-                expected_elements=test_case.expected_elements
-            )
+        """테스트 케이스에 맞는 프롬프트 생성 (8개 카테고리 지원)"""
+        return get_prompt_by_category(
+            category=test_case.category,
+            scenario=test_case.scenario,
+            industry=test_case.industry,
+            data_description=test_case.data_description,
+            raw_data=test_case.raw_data,
+            expected_elements=test_case.expected_elements
+        )
 
     def run_single_experiment(self, test_case: DataAnalysisTestCase) -> Dict:
         """단일 실험 실행"""
@@ -144,10 +124,10 @@ class DataAnalysisExperimentRunner:
             "quality_evaluation": quality_eval
         }
 
-    def run_all_experiments(self, limit: int = 108) -> Dict:
+    def run_all_experiments(self, limit: int = 80) -> Dict:
         """모든 실험 실행"""
         print("=" * 70)
-        print("데이터 분석 프롬프트 실험 (V1.0 - 동적 체크리스트)")
+        print("데이터 분석 프롬프트 실험 (V2.0 - 8개 카테고리)")
         print("=" * 70)
         print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"모델: {self.model}")
@@ -251,7 +231,7 @@ class DataAnalysisExperimentRunner:
 
 
 def main():
-    limit = 30
+    limit = 80
     if len(sys.argv) > 1:
         limit = int(sys.argv[1])
 
@@ -259,7 +239,7 @@ def main():
     summary = runner.run_all_experiments(limit=limit)
 
     print()
-    print(f"{limit}회 실험 완료!")
+    print(f"V2.0 데이터 분석 실험 {limit}회 완료!")
 
 
 if __name__ == "__main__":
